@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Xcode | 个人博客]]></title>
+  <link href="http://danielxu.github.com/blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://danielxu.github.com/"/>
+  <updated>2013-11-30T17:47:12+08:00</updated>
+  <id>http://danielxu.github.com/</id>
+  <author>
+    <name><![CDATA[徐大雨]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[查看Xocde编译优化后的图片(PNG)]]></title>
+    <link href="http://danielxu.github.com/blog/2013/05/02/ios-optimizations-image/"/>
+    <updated>2013-05-02T14:00:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/05/02/ios-optimizations-image</id>
+    <content type="html"><![CDATA[<p>Xcode开发工具，在编译APP的时候，会把APP内配图（PNG）进行优化。优化的动作是由pngcrush工具完成的，而优化后的图片文件是不能直接查看。</p>
+
+<p>那么如果想查看这样优化过后的图片，就需要使用pngcrush撤销这些图片的优化。下面是命令：</p>
+
+<p><code>bash
+xudayu@DayuXu:Test.app/$ for file in `ls | grep png`; do /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/pngcrush -revert-iphone-optimizations -q $file ~/Desktop/img/$file;done;
+</code></p>
+
+<!--more-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[开发工具错误及解决汇总]]></title>
+    <link href="http://danielxu.github.com/blog/2013/04/10/tools-error-handling/"/>
+    <updated>2013-04-10T09:52:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/04/10/tools-error-handling</id>
+    <content type="html"><![CDATA[<h2>升级到Xcode 4.6.1 添加设备和刷新Provisioning Profiles崩溃</h2>
+
+<p>在Xocde从低版本一直升级到最新的4.6.1后，在使用 Use for Development、“Add Device to Provisioning Portal”和刷新Provisioning Profiles的时候，会出现崩溃的现象，基本上是100%重现，下面就是解决办法（如果你是新安装的Xcode4.6.1应该是不会出现这个问题的）：</p>
+
+<p>参考：http://stackoverflow.com/questions/15659315/xcode-4-6-1-crashes-whenever-i-try-to-add-my-device-to-the-provisioning-portal</p>
+
+<p>其实，主要是删掉 “~/Library/Developer/Xcode/”目录下的connect1.apple.com*的db文件</p>
+
+<!--more-->
+
+]]></content>
+  </entry>
+  
+</feed>

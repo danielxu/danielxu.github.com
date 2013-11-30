@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: github | 个人博客]]></title>
+  <link href="http://danielxu.github.com/blog/categories/github/atom.xml" rel="self"/>
+  <link href="http://danielxu.github.com/"/>
+  <updated>2013-11-30T17:47:12+08:00</updated>
+  <id>http://danielxu.github.com/</id>
+  <author>
+    <name><![CDATA[徐大雨]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[搭建基于github的博客]]></title>
+    <link href="http://danielxu.github.com/blog/2013/01/06/setup-based-on-githubs-blog/"/>
+    <updated>2013-01-06T10:56:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/01/06/setup-based-on-githubs-blog</id>
+    <content type="html"><![CDATA[<p>原理：基于<a href="https://github.com/">github</a>的<a href="http://pages.github.com/">Pages</a>功能,使用基于github模式的博客管理工具<a href="http://octopress.org/">Octopress</a>生成个人的独立博客站点。</p>
+
+<hr />
+
+<h1>安装</h1>
+
+<h2>安装rvm和ruby（基于Mac）</h2>
+
+<p>安装rvm：</p>
+
+<p><code>
+bash -s stable &lt; &lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+</code></p>
+
+<p>设置classpath:</p>
+
+<p><code>
+echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm" # Load RVM function' &gt;&gt; ~/.bash_profile
+source ~/.bash_profile
+</code></p>
+
+<p>安装ruby:</p>
+
+<p><code>
+rvm install ruby-1.9.3-p194
+rvm use ruby-1.9.3-p194
+rvm gemset create octopress
+rvm gemset use octopress
+rvm rubygems latest
+</code></p>
+
+<p>有可能这3步都不需要。一般现在的Mac系统都自带ruby环境。一般在/usr/local/rvm和/usr/bin/ruby目录下面。</p>
+
+<!--more-->
+
+
+<h2>设置github账号</h2>
+
+<ul>
+<li><p>Github的账号注册地址是：<a href="https://github.com/signup/free">https://github.com/signup/free</a> 。申请好github账号后，建一个名为 username.github.com 的代码仓库。这里注意username必须是和你的账号名一致。
+如：ceshi</p></li>
+<li><p>配置ssh在终端里面输入</p></li>
+</ul>
+
+
+<p><code>
+[[ -f ~/.ssh/id_rsa.pub ]] || ssh-keygen -t rsa
+</code></p>
+
+<p>按照默认提示一路确认，生成密钥之后，将生成的信息复制到github页面中.</p>
+
+<p><code>
+[[ -f ~/.ssh/id_rsa.pub ]] &amp;&amp; cat ~/.ssh/id_rsa.pub
+</code></p>
+
+<p>然后在浏览器中打开页面：</p>
+
+<p><a href="https://github.com/account/ssh">https://github.com/account/ssh</a></p>
+
+<p>点击，Add another public key，粘贴前面步骤复制的信息，请格外注意，不要在Title中填写内容，直接将复制的内容粘贴到Key中，然后点击：Add Key即可。</p>
+
+<h2>安装Octopress</h2>
+
+<p>clone源码：</p>
+
+<p><code>
+git clone git://github.com/imathis/octopress.git ceshi.github.com
+cd ceshi.github.com    # If you use RVM, You'll be asked if you trust the .rvmrc file (say yes).
+git remote add ceshi git@github.com:ceshi/ceshi.github.com.git
+</code></p>
+
+<p>安装依赖：</p>
+
+<p><code>
+gem install bundler
+bundle install
+</code></p>
+
+<p>安装Octopress：</p>
+
+<p><code>
+rake install
+</code></p>
+
+<h1>配置</h1>
+
+<ul>
+<li><p>主要是修改文件：_config.yml ，这个配置文件都有相应的注释。主要就是改一些博客头，作者名之类的东西。 注意最好把里面的twitter相关的信息全部删掉，否则由于GFW的原因，将会造成页面load很慢。</p></li>
+<li><p>修改定制文件/source/_includes/custom/head.html 把google的自定义字体去掉，原因同上。</p></li>
+</ul>
+
+
+<h1>分享配置</h1>
+
+<p>配置评论和分享到微博功能（接中国地气）</p>
+
+<ul>
+<li>在_config.yml中增加一项： weibo_share: true</li>
+<li>修改 source/_includes/post/sharing.html ，增加：</li>
+</ul>
+
+
+<p>```html</p>
+
+<h1>为了不和octopress系统冲突，这里加了注释，使用时将注释删掉即可</h1>
+
+<p>// 下面的大括号的左括号{是全角的，如果复制，请自行改成半角
+ ｛% if site.weibo_share %}</p>
+
+<pre><code> ｛% include post/weibo.html %}
+</code></pre>
+
+<p> ｛% endif %}
+```</p>
+
+<ul>
+<li>增加文件：source/_includes/post/weibo.html</li>
+<li>访问 <a href="http://www.jiathis.com/">http://www.jiathis.com/</a> ，获取分享的代码,加入到weibo.html</li>
+<li>访问 <a href="http://uyan.cc/">http://uyan.cc/</a> ，获得评论的代码,加入到weibo.html</li>
+<li>获取代码的站点最好注册一下，可以统计分享、评论数据的</li>
+</ul>
+
+
+<h1>给文章添加版权信息</h1>
+
+<ul>
+<li>增加 source/_includes/post/copyright.htm，加入以下内容：</li>
+</ul>
+
+
+<p><code>html
+原创&amp;amp;整理的文章，版权声明:自由转载-非商用&amp;amp;衍生-保持署名 | &lt;a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh"&gt;Creative Commons BY-NC-ND 3.0&lt;/a&gt;
+</code></p>
+
+<ul>
+<li>修改 source/_layouts/post.html，在<footer>标签下增加如下代码：</li>
+</ul>
+
+
+<p>```html
+// 下面的大括号的左括号{是全角的，如果复制，请自行改成半角
+<footer></p>
+
+<pre><code>&lt;p class="meta"&gt;
+  ……省略代码
+  ｛% include post/categories.html %}
+&lt;/p&gt;
+&lt;!--这里是增加的 --&gt;
+&lt;p class="meta"&gt;
+    ｛% include post/copyright.html %}
+&lt;/p&gt;
+&lt;!--这里是增加的 --&gt;
+｛% unless page.sharing == false %}
+  ｛% include post/sharing.html %}
+｛% endunless %}
+……省略代码
+</code></pre>
+
+<p>  </footer>
+```</p>
+
+<h1>写微博的方法</h1>
+
+<p><a href="http://octopress.org/docs/blogging/">这里</a>有详细介绍：</p>
+
+<p><code>bash
+rake new_post[‘article name’] 生成博文框架，然后修改生成的文件即可
+rake generate 生成静态文件
+</code></p>
+
+<p>配置octopress与github的连接：</p>
+
+<p><code>
+rake setup_github_pages #然后输入上面的git站点地址，如：git@github.com:ceshi/ceshi.github.com.git，这个配置只执行一次就可以了
+</code></p>
+
+<p>发布：</p>
+
+<p><code>
+rake watch 检测文件变化，实时生成新内容
+rake preview 在本机4000端口生成访问内容
+rake deploy 发布文件
+</code></p>
+
+<p>第一次运行时，会询问是否建立对github的授权，输入：yes。</p>
+
+<p>再创建一个新的github的source分支，用于保存写作的md源文件等。</p>
+
+<p><code>
+git add .
+git commit -m "some changes"
+git push ceshi source
+</code></p>
+
+<p>可以到你的站点看看效果了：http://ceshi.github.com</p>
+
+<h1>Mac OS X 10.9 Mavericks</h1>
+
+<p>如果需要使用 <code>rvm</code> 更新，安装 ruby新版本，有可能需要重新验证环境</p>
+
+<p><code>
+rvm requirements
+</code></p>
+
+<p>如果中间出现什么其他的错误，可以使用<code>brew install xxx</code>安装缺少的依赖组件</p>
+
+<h1>参考</h1>
+
+<ul>
+<li><a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">devtang</a></li>
+<li><a href="http://www.yangzhiping.com/tech/octopress.html">yangzhiping</a></li>
+<li><a href="http://pages.github.com/">github pages</a></li>
+<li><a href="http://octopress.org/docs/blogging/">octopress blog</a></li>
+<li><a href="http://www.moncefbelyamani.com/how-to-install-and-configure-octopress-on-a-mac/">moncefbelyamani</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

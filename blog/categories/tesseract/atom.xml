@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tesseract | 个人博客]]></title>
+  <link href="http://danielxu.github.com/blog/categories/tesseract/atom.xml" rel="self"/>
+  <link href="http://danielxu.github.com/"/>
+  <updated>2013-11-30T17:47:12+08:00</updated>
+  <id>http://danielxu.github.com/</id>
+  <author>
+    <name><![CDATA[徐大雨]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[编译tesseract-ocr（For iOS引擎）]]></title>
+    <link href="http://danielxu.github.com/blog/2013/01/14/how-to-compile-tesseract-ocr-source-code-for-ios/"/>
+    <updated>2013-01-14T10:52:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/01/14/how-to-compile-tesseract-ocr-source-code-for-ios</id>
+    <content type="html"><![CDATA[<p>编译的过程中需要一些额外的组件，有可能MAC下没有，我的电脑上是下面的这些需要安装。如有不同，可自行查找错误信息，安装缺失的工具。</p>
+
+<p>参考：<a href="http://tinsuke.wordpress.com/2011/11/01/how-to-compile-and-use-tesseract-3-01-on-ios-sdk-5/">http://tinsuke.wordpress.com/2011/11/01/how-to-compile-and-use-tesseract-3-01-on-ios-sdk-5/</a></p>
+
+<h1>MAC下安装autoconf和automake</h1>
+
+<ul>
+<li>安装m4</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://mirrors.kernel.org/gnu/m4/m4-1.4.16.tar.gz
+tar -xzvf m4-1.4.16.tar.gz
+cd m4-1.4.16
+./configure --prefix=/usr/local
+make
+sudo make install
+</code></p>
+
+<ul>
+<li>安装autoconf</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://mirrors.kernel.org/gnu/autoconf/autoconf-2.69.tar.gz
+tar -xzvf autoconf-2.69.tar.gz
+cd autoconf-2.69
+./configure --prefix=/usr/local
+make
+sudo make install
+</code></p>
+
+<ul>
+<li>安装automake</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://mirrors.kernel.org/gnu/automake/automake-1.13.tar.gz
+tar -xzvf automake-1.13.tar.gz
+cd automake-1.13
+./configure --prefix=/usr/local
+make
+sudo make install
+</code></p>
+
+<ul>
+<li>安装libtool</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://mirrors.kernel.org/gnu/libtool/libtool-2.4.tar.gz
+tar -xzvf libtool-2.4.tar.gz
+cd libtool-2.4
+./configure --prefix=/usr/local
+make
+sudo make install
+</code></p>
+
+<!--more-->
+
+
+<h1>编译<a href="http://code.google.com/p/tesseract-ocr/">tesseract</a></h1>
+
+<p>在本地新建一个文件夹，如：build_tesseract将下面2个主要组件下载解压到此文件夹下.命令如下：</p>
+
+<p><code>bash
+mkdir build_tesseract
+cd build_tesseract
+</code></p>
+
+<p>在此文件夹下进行下面的命令：</p>
+
+<ul>
+<li>tesseract-ocr-3.02</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
+tar -xzvf tesseract-ocr-3.02.02.tar.gz
+mv tesseract-ocr-3.02.02 tesseract-ocr-3.02
+</code></p>
+
+<ul>
+<li>leptonica-1.69</li>
+</ul>
+
+
+<p><code>bash
+curl -O http://www.leptonica.com/source/leptonica-1.69.tar.gz
+tar -xzvf leptonica-1.69.tar.gz
+</code></p>
+
+<ul>
+<li>创建编译脚本 build.sh</li>
+</ul>
+
+
+<p>```bash</p>
+
+<h1>!/bin/sh</h1>
+
+<h1>build.sh</h1>
+
+<p>GLOBAL_OUTDIR="<code>pwd</code>/dependencies"
+LOCAL_OUTDIR="./outdir"
+LEPTON_LIB="<code>pwd</code>/leptonica-1.69"
+TESSERACT_LIB="<code>pwd</code>/tesseract-3.02"</p>
+
+<p>IOS_BASE_SDK="6.0"
+IOS_DEPLOY_TGT="4.3"</p>
+
+<h1>设置参数</h1>
+
+<p>setenv_all()
+{</p>
+
+<pre><code>    # Add internal libs
+    export CFLAGS="$CFLAGS -I$GLOBAL_OUTDIR/include -L$GLOBAL_OUTDIR/lib"
+
+    export CXX="$DEVROOT/usr/bin/llvm-g++"
+    export CC="$DEVROOT/usr/bin/llvm-gcc"
+
+    export LD=$DEVROOT/usr/bin/ld
+    export AR=$DEVROOT/usr/bin/ar
+    export AS=$DEVROOT/usr/bin/as
+    export NM=$DEVROOT/usr/bin/nm
+    export RANLIB=$DEVROOT/usr/bin/ranlib
+    export LDFLAGS="-L$SDKROOT/usr/lib/"
+
+    export CPPFLAGS=$CFLAGS
+    export CXXFLAGS=$CFLAGS
+</code></pre>
+
+<p>}</p>
+
+<h1>编译armv7</h1>
+
+<p>setenv_arm7()
+{</p>
+
+<pre><code>unset DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+
+
+export DEVROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+export SDKROOT=$DEVROOT/SDKs/iPhoneOS$IOS_BASE_SDK.sdk
+
+export CFLAGS="-arch armv7 -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/"
+
+setenv_all
+</code></pre>
+
+<p>}</p>
+
+<p>setenv_arm7s()
+{</p>
+
+<pre><code>unset DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+
+export DEVROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+export SDKROOT=$DEVROOT/SDKs/iPhoneOS$IOS_BASE_SDK.sdk
+
+export CFLAGS="-arch armv7s -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/"
+
+setenv_all
+</code></pre>
+
+<p>}</p>
+
+<h1>编译i386</h1>
+
+<p>setenv_i386()
+{</p>
+
+<pre><code>unset DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+
+export DEVROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+export SDKROOT=$DEVROOT/SDKs/iPhoneSimulator$IOS_BASE_SDK.sdk
+
+export CFLAGS="-arch i386 -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT"
+
+setenv_all
+</code></pre>
+
+<p>}</p>
+
+<h1>合并为一个库</h1>
+
+<p>create_outdir_lipo()
+{</p>
+
+<pre><code>for lib_i386 in `find $LOCAL_OUTDIR/i386 -name "lib*.a"`; do
+    lib_arm7=`echo $lib_i386 | sed "s/i386/arm7/g"`
+    lib_arm7s=`echo $lib_i386 | sed "s/i386/arm7s/g"`
+    lib=`echo $lib_i386 | sed "s/i386//g"`
+    xcrun -sdk iphoneos lipo -arch armv7s $lib_arm7s -arch armv7 $lib_arm7 -arch i386 $lib_i386 -create -output $lib
+done
+</code></pre>
+
+<p>}</p>
+
+<p>merge_libfiles()
+{</p>
+
+<pre><code>DIR=$1
+LIBNAME=$2
+
+cd $DIR
+for i in `find . -name "lib*.a"`; do
+    $AR -x $i
+done
+$AR -r $LIBNAME *.o
+rm -rf *.o __*
+cd -
+</code></pre>
+
+<p>}</p>
+
+<h6>#</h6>
+
+<h1>LEPTONLIB</h1>
+
+<h6>#</h6>
+
+<p>cd $LEPTON_LIB
+rm -rf $LOCAL_OUTDIR
+mkdir -p $LOCAL_OUTDIR/arm7 $LOCAL_OUTDIR/i386 $LOCAL_OUTDIR/arm7s</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_arm7
+./configure --host=arm-apple-darwin7 --enable-shared=no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+make -j12
+cp -rvf src/.libs/lib*.a $LOCAL_OUTDIR/arm7</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_arm7s
+./configure --host=arm-apple-darwin7s --enable-shared=no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+make -j12
+cp -rvf src/.libs/lib*.a $LOCAL_OUTDIR/arm7s</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_i386
+./configure --enable-shared=no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+make -j12
+cp -rvf src/.libs/lib*.a $LOCAL_OUTDIR/i386</p>
+
+<p>create_outdir_lipo
+mkdir -p $GLOBAL_OUTDIR/include/leptonica &amp;&amp; cp -rvf src/<em>.h $GLOBAL_OUTDIR/include/leptonica
+mkdir -p $GLOBAL_OUTDIR/lib &amp;&amp; cp -rvf $LOCAL_OUTDIR/lib</em>.a $GLOBAL_OUTDIR/lib
+cd ..</p>
+
+<h6>#</h6>
+
+<h1>TESSERACT-OCR (v3)</h1>
+
+<h6>#</h6>
+
+<p>cd $TESSERACT_LIB
+rm -rf $LOCAL_OUTDIR
+mkdir -p $LOCAL_OUTDIR/arm7 $LOCAL_OUTDIR/i386 $LOCAL_OUTDIR/arm7s</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_arm7
+bash autogen.sh
+./configure --host=arm-apple-darwin7 --enable-shared=no LIBLEPT_HEADERSDIR=$GLOBAL_OUTDIR/include/
+make -j12
+for i in <code>find . -name "lib*.a" | grep -v arm</code>; do cp -rvf $i $LOCAL_OUTDIR/arm7; done
+merge_libfiles $LOCAL_OUTDIR/arm7 libtesseract_all.a</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_arm7s
+bash autogen.sh
+./configure --host=arm-apple-darwin7s --enable-shared=no LIBLEPT_HEADERSDIR=$GLOBAL_OUTDIR/include/
+make -j12
+for i in <code>find . -name "lib*.a" | grep -v arm</code>; do cp -rvf $i $LOCAL_OUTDIR/arm7s; done
+merge_libfiles $LOCAL_OUTDIR/arm7s libtesseract_all.a</p>
+
+<p>make clean 2> /dev/null
+make distclean 2> /dev/null
+setenv_i386
+bash autogen.sh
+./configure --enable-shared=no LIBLEPT_HEADERSDIR=$GLOBAL_OUTDIR/include/
+make -j12
+for i in <code>find . -name "lib*.a" | grep -v arm</code>; do cp -rvf $i $LOCAL_OUTDIR/i386; done
+merge_libfiles $LOCAL_OUTDIR/i386 libtesseract_all.a</p>
+
+<p>create_outdir_lipo
+mkdir -p $GLOBAL_OUTDIR/include/tesseract
+tess_inc=( api/apitypes.h api/baseapi.h ccstruct/publictypes.h ccutil/errcode.h</p>
+
+<pre><code>       ccutil/genericvector.h ccutil/helpers.h ccutil/host.h ccutil/ndminx.h ccutil/ocrclass.h
+       ccutil/platform.h ccutil/tesscallback.h ccutil/unichar.h ccutil/unicharmap.h ccutil/unicharset.h
+       ccutil/strngs.h ccutil/memry.h ccmain/ltrresultiterator.h ccmain/pageiterator.h 
+       ccmain/resultiterator.h ccmain/thresholder.h )
+</code></pre>
+
+<p>for i in "${tess_inc[@]}"; do
+   cp -rvf $i $GLOBAL_OUTDIR/include/tesseract
+done
+mkdir -p $GLOBAL_OUTDIR/lib &amp;&amp; cp -rvf $LOCAL_OUTDIR/lib*.a $GLOBAL_OUTDIR/lib
+make clean 2> /dev/null
+make distclean 2> /dev/null
+rm -rf $LOCAL_OUTDIR
+cd ..</p>
+
+<p>echo "Finished!"
+```</p>
+
+<ul>
+<li>给 build.sh 添加执行权限,并执行</li>
+</ul>
+
+
+<p><code>bash
+chmod +x build.sh
+./build.sh
+</code></p>
+
+<p><strong>注意：</strong>有可能会报这个错误：</p>
+
+<p><code>bash
+autoheader: error: AC_CONFIG_HEADERS not found in configure.ac
+</code></p>
+
+<p>这时需要修改 tesseract-3.02.02/configure.ac 文件</p>
+
+<p>```bash</p>
+
+<h1>AM_INIT_AUTOMAKE(dist-zip)</h1>
+
+<p> AM_INIT_AUTOMAKE</p>
+
+<h1>AM_CONFIG_HEADER(config_auto.h:config/config.h.in)  //将这句注释</h1>
+
+<p>AC_CONFIG_HEADER(config_auto.h:config/config.h.in) //修改为这个
+```</p>
+
+<p>编译成功后，会在当前目录下的 dependencies 文件夹生成所需要的头文件“.h”和lib库"*.a"。项目中只需要使用头文件和liblept.a、libtesseract_all.a这2个库即可。</p>
+
+<p><img src="/images/tesseract/build_success.png" alt="tesseract" /></p>
+
+<h1>使用</h1>
+
+<h2>简单使用</h2>
+
+<p>参考：<a href="https://github.com/ldiqual/tesseract-ios">tesseract-ios</a>和<a href="https://github.com/ldiqual/tesseract-ios-lib/tree/master/lib">tesseract-ios-lib</a></p>
+
+<ul>
+<li>Tesseract.h</li>
+</ul>
+
+
+<p>```objc
+//
+//  Tesseract.h
+//  Tesseract
+//</p>
+
+<h1>import &lt;Foundation/Foundation.h></h1>
+
+<p>@interface Tesseract : NSObject {</p>
+
+<pre><code>NSString* _dataPath;
+NSString* _language;
+NSMutableDictionary* _variables;
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li><p>(NSString *)version;</p></li>
+<li><p>(id)initWithDataPath:(NSString <em>)dataPath language:(NSString </em>)language;</p></li>
+<li>(void)setVariableValue:(NSString <em>)value forKey:(NSString </em>)key;</li>
+<li>(void)setImage:(UIImage *)image;</li>
+<li>(BOOL)setLanguage:(NSString *)language;</li>
+<li>(BOOL)recognize;</li>
+<li>(NSString *)recognizedText;</li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<ul>
+<li>Tesseract.mm</li>
+</ul>
+
+
+<p>```objc
+//
+//  Tesseract.mm
+//  Tesseract
+//</p>
+
+<h1>import "Tesseract.h"</h1>
+
+<h1>import "baseapi.h"</h1>
+
+<h1>import "environ.h"</h1>
+
+<h1>import "pix.h"</h1>
+
+<p>namespace tesseract {</p>
+
+<pre><code>class TessBaseAPI;
+</code></pre>
+
+<p>};</p>
+
+<p>@interface Tesseract () {</p>
+
+<pre><code>tesseract::TessBaseAPI* _tesseract;
+uint32_t* _pixels;
+</code></pre>
+
+<p>}</p>
+
+<p>@end</p>
+
+<p>@implementation Tesseract</p>
+
+<ul>
+<li><p>(NSString *)version {
+  return [NSString stringWithFormat:@"%s", tesseract::TessBaseAPI::Version()];
+}</p></li>
+<li><p>(id)initWithDataPath:(NSString <em>)dataPath language:(NSString </em>)language {
+  self = [super init];
+  if (self) {</p>
+
+<pre><code>  _dataPath = dataPath;
+  _language = language;
+  _variables = [[NSMutableDictionary alloc] init];
+
+  [self copyDataToDocumentsDirectory];
+  _tesseract = new tesseract::TessBaseAPI();
+
+  BOOL success = [self initEngine];
+  if (!success) {
+      return NO;
+  }
+</code></pre>
+
+<p>  }
+  return self;
+}</p></li>
+<li><p>(BOOL)initEngine {
+  int returnCode = <em>tesseract->Init([</em>dataPath UTF8String], [_language UTF8String]);
+  return (returnCode == 0) ? YES : NO;
+}</p></li>
+<li><p>(void)copyDataToDocumentsDirectory {</p>
+
+<p>  // Useful paths
+  NSFileManager <em>fileManager = [NSFileManager defaultManager];
+  NSArray </em>documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString <em>documentPath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
+  NSString </em>dataPath = [documentPath stringByAppendingPathComponent:_dataPath];</p>
+
+<p>  // Copy data in Doc Directory
+  if (![fileManager fileExistsAtPath:dataPath]) {</p>
+
+<pre><code>  NSString *bundlePath = [[NSBundle bundleForClass:[self class]] bundlePath];
+  NSString *tessdataPath = [bundlePath stringByAppendingPathComponent:_dataPath];
+  if (tessdataPath) {
+      [fileManager createDirectoryAtPath:documentPath withIntermediateDirectories:YES attributes:nil error:NULL];
+      [fileManager copyItemAtPath:tessdataPath toPath:dataPath error:nil];
+  }
+</code></pre>
+
+<p>  }</p>
+
+<p>  setenv("TESSDATA_PREFIX", [[documentPath stringByAppendingString:@"/"] UTF8String], 1);
+}</p></li>
+<li><p>(void)setVariableValue:(NSString <em>)value forKey:(NSString </em>)key {
+  /*</p>
+
+<ul>
+<li> Example:</li>
+<li> _tesseract->SetVariable("tessedit_char_whitelist", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");</li>
+<li> _tesseract->SetVariable("language_model_penalty_non_freq_dict_word", "0");</li>
+<li> _tesseract->SetVariable("language_model_penalty_non_dict_word ", "0");
+*/</li>
+</ul>
+
+
+<p>  [<em>variables setValue:value forKey:key];
+  </em>tesseract->SetVariable([key UTF8String], [value UTF8String]);
+}</p></li>
+<li><p>(void)loadVariables {
+  for (NSString* key in _variables) {</p>
+
+<pre><code>  NSString* value = [_variables objectForKey:key];
+  _tesseract-&gt;SetVariable([key UTF8String], [value UTF8String]);
+</code></pre>
+
+<p>  }
+}</p></li>
+<li><p>(BOOL)setLanguage:(NSString *)language {
+  _language = language;
+  int returnCode = [self initEngine];
+  if (returnCode != 0) return NO;</p>
+
+<p>  /*</p>
+
+<ul>
+<li> "WARNING: On changing languages, all Tesseract parameters</li>
+<li> are reset back to their default values."
+*/
+[self loadVariables];
+return YES;
+}</li>
+</ul>
+</li>
+<li><p>(BOOL)recognize {
+  int returnCode = _tesseract->Recognize(NULL);
+  return (returnCode == 0) ? YES : NO;
+}</p></li>
+<li><p>(NSString <em>)recognizedText {
+  char</em> utf8Text = _tesseract->GetUTF8Text();
+  return [NSString stringWithUTF8String:utf8Text];
+}</p></li>
+<li><p>(void)setImage:(UIImage *)image
+{
+  free(_pixels);</p>
+
+<p>  CGSize size = [image size];
+  int width = size.width;
+  int height = size.height;</p>
+
+<p>  if (width &lt;= 0 || height &lt;= 0) {</p>
+
+<pre><code>  return;
+</code></pre>
+
+<p>  }</p>
+
+<p>  _pixels = (uint32_t *) malloc(width * height * sizeof(uint32_t));</p>
+
+<p>  // Clear the pixels so any transparency is preserved
+  memset(_pixels, 0, width * height * sizeof(uint32_t));</p>
+
+<p>  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</p>
+
+<p>  // Create a context with RGBA <em>pixels
+  CGContextRef context = CGBitmapContextCreate(</em>pixels, width, height, 8, width * sizeof(uint32_t), colorSpace,</p>
+
+<pre><code>                                           kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
+</code></pre>
+
+<p>  // Paint the bitmap to our context which will fill in the _pixels array
+  CGContextDrawImage(context, CGRectMake(0, 0, width, height), [image CGImage]);</p>
+
+<p>  // We're done with the context and color space
+  CGContextRelease(context);
+  CGColorSpaceRelease(colorSpace);</p>
+
+<p>  <em>tesseract->SetImage((const unsigned char *) </em>pixels, width, height, sizeof(uint32_t), width * sizeof(uint32_t));
+}</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<h2>Code Sample</h2>
+
+<pre><code>#import "Tesseract.h"
+
+Tesseract* tesseract = [[Tesseract alloc] initWithDataPath:@"tessdata" language:@"eng"];
+[tesseract setVariableValue:@"0123456789" forKey:@"tessedit_char_whitelist"];
+[tesseract setImage:[UIImage imageNamed:@"image_sample.jpg"]];
+[tesseract recognize];
+
+NSLog(@"%@", [tesseract recognizedText]);
+</code></pre>
+
+<h2>其他方式使用</h2>
+
+<p>可以结合下列参考：</p>
+
+<ul>
+<li><p><a href="https://github.com/rcarlsen/Pocket-OCR">https://github.com/rcarlsen/Pocket-OCR</a></p></li>
+<li><p>官方 <a href="http://developer.apple.com/library/ios/#samplecode/PhotoPicker/Introduction/Intro.html">PhotoPicker</a> 实例</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

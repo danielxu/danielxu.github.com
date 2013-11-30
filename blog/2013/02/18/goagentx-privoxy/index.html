@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GoAgentX 智能代理 - 个人博客</title>
+  <meta name="author" content="徐大雨">
+
+  
+  <meta name="description" content="GoAgent &amp; GoAgentX GoAgent是一个基于Google App Engine的翻墙工具。 GoAgentX 是一个在 Mac OS X 下使用代理服务的图形界面控制软件，方便一般用户在 Mac OS X 上配置和使用 goagent、west-chamber- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danielxu.github.com/blog/2013/02/18/goagentx-privoxy/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/favicon.ico" type="image/vnd.microsoft.icon" rel="icon"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="个人博客" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">个人博客</a></h1>
+  
+    <h2>随时记录下自己的点滴.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danielxu.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">GoAgentX 智能代理</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T12:29:00+08:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>GoAgent &amp; GoAgentX</h2>
+
+<p><a href="https://code.google.com/p/goagent/">GoAgent</a>是一个基于Google App Engine的翻墙工具。</p>
+
+<p><a href="https://github.com/liuyix/GoAgentX">GoAgentX</a> 是一个在 Mac OS X 下使用代理服务的图形界面控制软件，方便一般用户在 Mac OS X 上配置和使用 goagent、west-chamber-season-3、SSH 以及 stunnel。</p>
+
+<p>安装教程可自行Google搜索。</p>
+
+<!--more-->
+
+
+<h2>步骤1：申请创建一个Application</h2>
+
+<h3>1、申请Google App Engine账号</h3>
+
+<p>登录http://appengine.google.com，如果你已经拥有一个Gmail账户，直接输入账号密码就可以登录；如果没有则需要新申请一个Gmail账户。</p>
+
+<h3>2、创建Application</h3>
+
+<p><img src="/images/goagnet/1.jpg"></p>
+
+<h3>3、通过短信验证你的账户</h3>
+
+<p>需要短信验证才可以进行下一步操作，Country and Carrier（国家和运营商）处选择Other，Mobile Number（手机号码）处填写你的个人手机号码号码，格式为+8613912345678</p>
+
+<p><img src="/images/goagnet/2.jpg"></p>
+
+<h3>4、将手机收到的验证码输入并Send</h3>
+
+<p>你将会收到谷歌发给你的短信，短信内容大致为：Google App Engine：******（六位数字）。</p>
+
+<p><img src="/images/goagnet/3.jpg"></p>
+
+<h3>5、创建一个属于你的Application</h3>
+
+<ul>
+<li>1）输入一个Application ID，允许使用英文字母和短横杆；</li>
+<li>2）点击Check Available，检查一下是否可用；</li>
+<li>3）输入Application名称，这里可以随便填；</li>
+<li>4）勾选I accept these terms，即接受协议；</li>
+<li>5）最后Creat Application</li>
+</ul>
+
+
+<p><img src="/images/goagnet/4.jpg"></p>
+
+<p>Final -当你看到以下画面，说明你已经成功创建一个 Application</p>
+
+<p><img src="/images/goagnet/5.jpg"></p>
+
+<p>注：每个Gmail账户最多只能够创建10个Google App Engine应用，每个应用每天有1GB免费流量。如果你经常下载或者观看视频，建议多创建几个Google App Engine应用。</p>
+
+<h2>步骤2：修改谷歌账号两步验证</h2>
+
+<h3>1、进入设置</h3>
+
+<p>进入谷歌账户设置页面https://www.google.com/settings，在&#8221;安全性&#8221;-&#8220;两步认证&#8221;处开始进行设置</p>
+
+<p><img src="/images/goagnet/6.jpg"></p>
+
+<h3>2、手机设置</h3>
+
+<p>此处你需要点击发送验证码，获取验证码后提交确认进入下一步</p>
+
+<p><img src="/images/goagnet/8.jpg"></p>
+
+<h3>3、验证计算机</h3>
+
+<p>如果当前计算机不是你个人的计算机，不要勾选信任此计算机；</p>
+
+<p><img src="/images/goagnet/9.jpg"></p>
+
+<h3>4、最后</h3>
+
+<p>激活</p>
+
+<p><img src="/images/goagnet/10.jpg"></p>
+
+<p>开始为你的Application创建密码</p>
+
+<p><img src="/images/goagnet/11.jpg"></p>
+
+<p>生成密码</p>
+
+<p><img src="/images/goagnet/12.jpg"></p>
+
+<p>记下这里生成的密码</p>
+
+<p><img src="/images/goagnet/13.jpg"></p>
+
+<p>以上步骤有可能有些地方会稍微不同，不过总体来说就是这样，应该大家照着图来做都可以做到这步</p>
+
+<h2>步骤3：GoAgentX</h2>
+
+<p>把下载好的GoAgentX安装上，打开。</p>
+
+<h3>设置AppEngine信息</h3>
+
+<p><img src="/images/goagnet/14.png"></p>
+
+<ul>
+<li>App ID是你刚才申请的那个</li>
+<li>用户名是你gmail邮箱</li>
+<li>密码这里要注意了，这个不是gmail邮箱的密码，是上面第4步最后一个操作生成的密码。</li>
+<li>服务密码可设置也可不设置</li>
+</ul>
+
+
+<h3>部署goagent服务端</h3>
+
+<p><img src="/images/goagnet/16.png"></p>
+
+<p>点击启动，进行服务端部署，部署好后在服务端配置中添入App Engine App ID</p>
+
+<p><img src="/images/goagnet/17.png"></p>
+
+<p>最后在此界面选择goagent，启动</p>
+
+<p><img src="/images/goagnet/18.png"></p>
+
+<p>其他方面的配置，可Google搜索。</p>
+
+<h2>步骤4：浏览器配置</h2>
+
+<p><a href="https://chrome.google.com/webstore/detail/proxy-switchysharp/dpplabbmogkhghncfbfdeeokoefdjegm">SwitchySharp插件</a>，SwitchySharp插件加上自动更新的“墙”List（地址见下图），我们就可以在浏览器中享受无墙的世界了。</p>
+
+<p><img src="/images/goagnet/switch-sharp.png"></p>
+
+<h2>Privoxy（与GoAgent配合）</h2>
+
+<p>使用GoAgentX的话一般不需要配置这个</p>
+
+<p>Privoxy是一个智能代理切换软件，它的使用必须基于GoAgent或其它已部署好的代理服务。下面介绍如何安装和配置privoxy。</p>
+
+<h3>安装</h3>
+
+<p>使用brew就可以一键安装：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install privoxy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>自动启动</h3>
+
+<p>设置好自动启动后，我们就不用管它了。方法如下：</p>
+
+<p>切换到/Library/LaunchAgents目录，用sudo vim新建一个名为local.privoxy.plist的文件，文件内容如下所示：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;dict&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>local.arcueid.privoxy<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;array&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;string&gt;</span>/usr/local/sbin/privoxy<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;string&gt;</span>--no-daemon<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;string&gt;</span>/usr/local/etc/privoxy/config<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/array&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>/usr/local/Cellar/privoxy/3.0.19/sbin/privoxy.log<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>/usr/local/Cellar/privoxy/3.0.19/sbin/privoxy.log<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dict&gt;</span>
+</span><span class='line'><span class="nt">&lt;/plist&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>编辑完成后，执行如下命令，就可以把privoxy设置成开机自动启动了：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo launchctl load /Library/LaunchAgents/local.privoxy.plist
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以用如下2条命令验证privoxy已经启动了。一是用ps查看是否有privoxy进程，二是查看privoxy默认监听的8118端口是否已经打开。如下所示：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>tangqiao LaunchAgents<span class="o">]</span><span class="nv">$ps</span> aux  | grep privoxy
+</span><span class='line'>tangqiao       25641   0.3  0.0  2436516    492 s001  U+    5:31下午   0:00.00 grep --color<span class="o">=</span>auto privoxy
+</span><span class='line'>root           17984   0.0  0.2  2477764  17452   ??  Ss   10:13上午   0:50.28 /usr/local/Cellar/privoxy/3.0.19/sbin/privoxy --no-daemon /usr/local/etc/privoxy/config
+</span><span class='line'><span class="o">[</span>tangqiao LaunchAgents<span class="o">]</span><span class="nv">$netstat</span> -an | grep 8118
+</span><span class='line'>tcp4       0      0  127.0.0.1.8118         *.*                    LISTEN
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置</h3>
+
+<p>我们需要配置Provixy才能使用它。配置步骤如下：</p>
+
+<p>一. 用vim打开privoxy的配置文件：vim /usr/local/etc/privoxy/config
+在最后增加如下内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>actionsfile wall.action
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>二. 在/usr/local/etc/privoxy/目录下新建一个名为 wall.action的文件，然后在上面添加如下内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>+forward-override<span class="o">{</span>forward 0.0.0.0:8087<span class="o">}}</span>
+</span><span class='line'>.google.com.hk
+</span><span class='line'>.facebook.com
+</span><span class='line'>.google.com
+</span><span class='line'>.fbcdn.net
+</span><span class='line'>.gstatic.com
+</span><span class='line'>.gmail.com
+</span><span class='line'>.twitter.com
+</span><span class='line'>.youtube.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该内容第一行表示接下来的内容会智能走端口为8087的代理，后面每行一个地址。你可以随时将你想增加的内容添加进去。该配置文件的官方详细说明文档<a href="http://www.privoxy.org/3.0.19/user-manual/actions-file.html#ACTIONS-FILE">在这里</a>。</p>
+
+<p>三. 打开mac的代理设置，将“Web代理”和&#8221;安全Web代理&#8221;都设置成127.0.0.1，端口为8118。如下图所示：</p>
+
+<p>  <img src="/images/goagnet/mac-proxy.png"></p>
+
+<h3>Tips</h3>
+
+<ol>
+<li><p>如果你的GoAgent监听在8087端口，而Privoxy监听在8118端口，那么到这一步，你就可以让你的所有应用正常翻墙了。
+需要注意的是SwitchySharp默认会忽略系统代理直接连接网络，你可能需要选择它的“使用系统代理设置”这一项，如下所示：</p>
+
+<p>  <img src="/images/goagnet/switch-sharp-use-system-proxy.png"></p></li>
+<li><p>用浏览器访问 config.privoxy.org，即可用Web界面管理自己的provixy配置文件。不过，事先需要在config文件中启用Web管理功能，方法是编辑/usr/local/etc/privoxy/config 文件，将enable-edit-actions的值设置为1即可。</p></li>
+<li><p>访问 <a href="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</a> 可以查询某一个特定的URL是否会走代理服务。我们可以随时在这儿查询，结合上面的第2步，将一些URL Pattern加入到代理列表文件 wall.action 中, 我们就可以方便地管理Privoxy。</p></li>
+<li><p>证书是个麻烦事儿，由于GoAgent的证书是自己生成的而不是权威机构颁发的，所以需要把GoAgent的证书加到钥匙串访问的可信证书里面，如下图所示。另外GoAgent的默认带的证书因为是公开的，所以有潜在被<a href="http://zh.wikipedia.org/zh-hk/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB">中间人攻击</a>的危险，所以更安全的做法是把默认的证书删掉再重启GoAgent，这样GoAgent就会重新另外生成一个证书了，再把这个新证书加到钥匙串访问中，会更安全一些。
+<img src="/images/goagnet/goagent-cer.png"></p></li>
+</ol>
+
+
+<h3>参考</h3>
+
+<ul>
+<li>http://iaiai.iteye.com/blog/1608369</li>
+<li>http://blog.devtang.com/blog/2012/12/08/use-privoxy/</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T12:29:00+08:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mac/'>mac</a>
+  
+</span>
+
+
+    </p>
+	<p class="meta">
+		原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+	</p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <style>
+    .flash-video{display:none;}
+</style>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_renren">人人网</a>
+	<a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1729167" async=""></script>
+<!-- UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/18/git-simple-workflow/" title="Previous Post: 项目中使用git管理源码简单流程">&laquo; 项目中使用git管理源码简单流程</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/04/10/tools-error-handling/" title="Next Post: 开发工具错误及解决汇总">开发工具错误及解决汇总 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/ios-ui-design/">iOS界面设计切图小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/10/tools-error-handling/">开发工具错误及解决汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>现沪江网移动开发负责</p>
+  <p>JAVA开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾开发开心词场、沪江小D等移动APP</p>
+</section>
+<section>
+  <h1>其他博客</h1>
+  <p><a href="http://timroadley.com/">Tim Roadley</a></p>
+  <p><a href="http://blog.devtang.com/">唐巧的技术博客</a></p>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

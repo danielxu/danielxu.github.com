@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ZXing | 个人博客]]></title>
+  <link href="http://danielxu.github.com/blog/categories/zxing/atom.xml" rel="self"/>
+  <link href="http://danielxu.github.com/"/>
+  <updated>2013-11-30T17:47:12+08:00</updated>
+  <id>http://danielxu.github.com/</id>
+  <author>
+    <name><![CDATA[徐大雨]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在iOS项目中使用ZXing]]></title>
+    <link href="http://danielxu.github.com/blog/2013/01/17/use-zxing/"/>
+    <updated>2013-01-17T17:40:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/01/17/use-zxing</id>
+    <content type="html"><![CDATA[<p>之前项目中使用过ZXing进行二维码识别，不过人比较懒。发现<a href="http://blog.devtang.com/blog/2012/12/23/use-zxing-library/">唐巧的博文：在iOS中使用ZXing库</a>,就引用过来，留着以后查询使用。</p>
+
+<h2>前言</h2>
+
+<p><a href="https://code.google.com/p/zxing/">ZXing</a>(<a href="https://github.com/zxing/zxing">Github镜像地址</a>)是一个开源的条码生成和扫描库（开源协议为<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache2.0</a>)。它不但支持众多的条码格式，而且有各种语言的实现版本，它支持的语言包括：Java, C++, C#, Objective-C, ActionScript和Ruby。</p>
+
+<!-- more -->
+
+
+<h2>集成步骤</h2>
+
+<p>首先去Google Code或Github将ZXing的代码下载下来，整个工程比较大，我们只需要其中涉及iOS的部分，所以最好做一些裁剪。简单来说，我们只需要保留cpp和iphone这2个文件夹，其余的全部删掉。如下图所示：</p>
+
+<p><img src="/images/zxing/zxing-step-1.png"></p>
+
+<p>接着我们继续裁剪，对于cpp这个目录，只保留cpp/core/src/zxing下面的内容，其余内容也可以删掉了。但是整个目录结构必须保持原样。裁剪完后，整个目录结构如下所示：</p>
+
+<p><img src="/images/zxing/zxing-step-2.png"></p>
+
+<p>接下来，我们把裁剪后的zxing目录整个移动到我们的iOS项目的目录下，并且把上图中可以看到的ZXingWidget.xcodeproj文件拖动到我们的iOS工程中。</p>
+
+<p>下一步，我们需要设置ZXing项目和我们原本的iOS项目之间的依赖关系。在我们的iOS项目的设置中，点击build phases tab，然后增加 Target Dependencies 和 Link binary，并且增加这些framework依赖：</p>
+
+<pre><code>a. AVFoundation
+b. AudioToolbox
+c. CoreVideo
+d. CoreMedia
+e. libiconv
+f. AddressBook
+g. AddressBookUI
+</code></pre>
+
+<p>完成之后如下图所示：</p>
+
+<p><img src="/images/zxing/zxing-step-3.png"></p>
+
+<p>最后一步，在设置中增加如下2个header search path:</p>
+
+<ul>
+<li>./zxing/iphone/ZXingWidget/Classes</li>
+<li>./zxing/cpp/core/src</li>
+</ul>
+
+
+<p>需要注意的是，第一个path要设置成循环查找子目录，而第二个不循环查找，如下图所示：</p>
+
+<p><img src="/images/zxing/zxing-step-4.png"></p>
+
+<p>恭喜你，完成这步之后，你就已经完成ZXing库的集成了。下面谈谈如何使用ZXing库来做二维码识别。</p>
+
+<h2>二维码识别</h2>
+
+<p>ZXing的iOS版本提供2种方法来做二维码识别功能，第一种方法比较简单，第二种方法比较复杂。我在做Demo时使用了第一种方法，做真正项目开发的时候使用了第二种方法，所以都给大家介绍一下。</p>
+
+<h3>使用方法一</h3>
+
+<p>ZXing直接提供了一个扫描二维码的View Controller，即ZXingWidgetController。在需要使用的界面代码中，加入文件依赖：</p>
+
+<p>``` objc</p>
+
+<h1>import &lt;ZXingWidgetController.h></h1>
+
+<h1>import &lt;QRCodeReader.h></h1>
+
+<p><code>
+然后在需要扫描的时候，调用如下代码即可：
+</code> objc
+- (IBAction)scanPressed:(id)sender {
+  ZXingWidgetController <em>widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
+  NSMutableSet </em>readers = [[NSMutableSet alloc ] init];
+  QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
+  [readers addObject:qrcodeReader];
+  [qrcodeReader release];
+  widController.readers = readers;
+  [readers release];
+  [self presentModalViewController:widController animated:YES];
+  [widController release];
+}
+```</p>
+
+<p>在ZXing扫描有结果时，会调用如下回调函数：</p>
+
+<p>``` objc</p>
+
+<p>@protocol ZXingDelegate
+- (void)zxingController:(ZXingWidgetController<em>)controller didScanResult:(NSString </em>)result;
+- (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
+@end</p>
+
+<p>```</p>
+
+<h3>使用方法二</h3>
+
+<p>方法二与方法一的区别就相当于AVFoundation和UIImagePickerController的区别一样。简单来说，就是使用方法二比方法一更加麻烦，但是获得的可定制性更高。</p>
+
+<p>使用方法二时，你需要自己用AVFoundation获得Camera返回的实时图象，然后转成UIImage，最后传给ZXing的Decoder类完成二维码的识别。由于使用AVFoundation涉及的代码略多，我写的示意代码如下：</p>
+
+<p>``` objc</p>
+
+<h1>import "Decoder.h"</h1>
+
+<h1>import "TwoDDecoderResult.h"</h1>
+
+<h1>import "QRCodeReader.h"</h1>
+
+<ul>
+<li>(void)viewDidLoad {
+  // setup QR reader
+  self.qrReader = [[NSMutableSet alloc ] init];
+  QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
+  [self.qrReader addObject:qrcodeReader];
+  self.scanningQR = NO;
+  self.step = STEP_QR;
+}</li>
+</ul>
+
+
+<p>// AVFoundation的回调函数
+- (void)captureOutput:(AVCaptureOutput <em>)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection </em>)connection {</p>
+
+<pre><code>// 第一步，将sampleBuffer转成UIImage
+UIImage *image= [self getCaptureImage:sampleBuffer];
+// 第二步，用Decoder识别图象
+Decoder *d = [[Decoder alloc] init];
+d.readers = self.qrReader;
+d.delegate = self;
+self.scanningQR = [d decodeImage:image] == YES ? NO : YES;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>ZXing的Decoder类提供了以下回调函数获得识别结果：</p>
+
+<p>``` objc
+@protocol DecoderDelegate<NSObject>
+@optional
+- (void)decoder:(Decoder <em>)decoder willDecodeImage:(UIImage </em>)image usingSubset:(UIImage <em>)subset;
+- (void)decoder:(Decoder </em>)decoder didDecodeImage:(UIImage <em>)image usingSubset:(UIImage </em>)subset withResult:(TwoDDecoderResult *)result {</p>
+
+<pre><code>NSLog(@"result = %@", [result text]);
+</code></pre>
+
+<p>}
+- (void)decoder:(Decoder <em>)decoder failedToDecodeImage:(UIImage </em>)image usingSubset:(UIImage <em>)subset reason:(NSString </em>)reason;
+- (void)decoder:(Decoder *)decoder foundPossibleResultPoint:(CGPoint)point;</p>
+
+<p>@end</p>
+
+<p>```</p>
+
+<h2>Trouble Shoot &amp; Tips</h2>
+
+<p>我在使用中遇到了一些问题，主要是编译的问题。</p>
+
+<ol>
+<li>一个是找不到 <iostream> 头文件。解决方法：把用到ZXing的源文件扩展名由.m改成.mm。</li>
+<li>报错：Undefined symbols for architecture armv7s，<a href="http://stackoverflow.com/questions/12968369/undefined-symbols-for-architecture-armv7-when-using-zxing-library-in-xcode-4-5">解决方法</a>：把ZXingWidget的一个build target参数："Build Active Architecture Only" 修改成 "NO".</li>
+<li>报错：No such file or directory，出现该错误可能是你的Header Search Path写错了，或者就是你的zxing库的目录结构不是我上面强调的，好好检查一下吧。</li>
+<li>如果你需要生成二维码做测试，推荐一个不错的在线生成二维码的网站：<a href="http://cli.im/">http://cli.im/</a></li>
+</ol>
+
+
+<h2>ZXing和OpenCV的兼容问题</h2>
+
+<p>ZXing 2.1 和OpenCV 2.4.3的iOS库有一些兼容问题，他们对C++标准库的版本和编译器版本都有一些需求，造成满足一方了，另一方就编译不通过了。Stackoverflow上有人终于找到了一个让它们和平共处的方法，但是只适用于iOS5.0以上版本。正好我们的App只支持iOS5.0+，所以就搞定了。所以如果你也正好遇到这个问题，可以参考<a href="http://stackoverflow.com/questions/13498581/opencv-zxing-incompatibility-on-ios">这个贴子</a>。</p>
+]]></content>
+  </entry>
+  
+</feed>

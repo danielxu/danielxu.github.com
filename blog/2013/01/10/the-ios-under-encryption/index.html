@@ -1,0 +1,1005 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS下的加密 - 个人博客</title>
+  <meta name="author" content="徐大雨">
+
+  
+  <meta name="description" content="在iOS开发过程中使用过的数据加密，主要是密码、敏感数据等。现在记录下来，以便以后查询。 MD5 其实网上有NSString扩展类，里面一般都包含了MD5，大小写字母转换，空字符判定等。这里主要记录一下MD5的方法，同时增加UTF16不一样的MD5加密，下面即方法： 1
+2
+3
+4
+5
+6
+7
+8 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danielxu.github.com/blog/2013/01/10/the-ios-under-encryption/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/favicon.ico" type="image/vnd.microsoft.icon" rel="icon"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="个人博客" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">个人博客</a></h1>
+  
+    <h2>随时记录下自己的点滴.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danielxu.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iOS下的加密</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T11:26:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在iOS开发过程中使用过的数据加密，主要是密码、敏感数据等。现在记录下来，以便以后查询。</p>
+
+<h1>MD5</h1>
+
+<p>其实网上有NSString扩展类，里面一般都包含了MD5，大小写字母转换，空字符判定等。这里主要记录一下MD5的方法，同时增加UTF16不一样的MD5加密，下面即方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//普通的加密，UTF8</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">md5</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">UTF8String</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span><span class="n">cStr</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">cStr</span><span class="p">),</span> <span class="n">result</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+</span><span class='line'>            <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//UTF16使用的MD5，这里encoding使用，NSUTF16LittleEndianStringEncoding</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">md5ForUTF16:</span><span class="p">(</span><span class="n">NSStringEncoding</span><span class="p">)</span><span class="nv">encoding</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nl">dataUsingEncoding:</span><span class="n">encoding</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">UInt8</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">(</span><span class="n">UInt8</span> <span class="o">*</span><span class="p">)[</span><span class="n">temp</span> <span class="n">bytes</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span><span class="n">cStr</span><span class="p">,</span> <span class="p">[</span><span class="n">temp</span> <span class="n">length</span><span class="p">],</span> <span class="n">result</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+</span><span class='line'>            <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<h1>Base64 &amp; HEX</h1>
+
+<p>使用的<a href="https://github.com/mattgemmell/MGTwitterEngine/">MGTwitterEngine</a>中的NSData (Base64)扩展，下面添加的是NSData转换成HEX的方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//转换成HEX</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">hexStringForData:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">data</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSMutableString</span><span class="o">*</span> <span class="n">hexString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableString</span> <span class="n">string</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span> <span class="n">bytes</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">[</span><span class="n">data</span> <span class="n">length</span><span class="p">];</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">hexString</span> <span class="nl">appendFormat:</span><span class="s">@&quot;%02X&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">hexString</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//将HEX转换成NSData</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">dataForHexString:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">hexString</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">hexString</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ch</span> <span class="o">=</span> <span class="p">[[</span><span class="n">hexString</span> <span class="n">lowercaseString</span><span class="p">]</span> <span class="nl">cStringUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSMutableData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableData</span> <span class="n">data</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">char</span> <span class="n">byte</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="sc">&#39;0&#39;</span> <span class="o">&lt;=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">&#39;9&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">byte</span> <span class="o">=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="sc">&#39;a&#39;</span> <span class="o">&lt;=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">&#39;f&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">byte</span> <span class="o">=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">ch</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">byte</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="sc">&#39;0&#39;</span> <span class="o">&lt;=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">&#39;9&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">byte</span> <span class="o">+=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="sc">&#39;a&#39;</span> <span class="o">&lt;=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">&#39;f&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">byte</span> <span class="o">+=</span> <span class="o">*</span><span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">ch</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">data</span> <span class="nl">appendBytes:</span><span class="o">&amp;</span><span class="n">byte</span> <span class="nl">length:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>AES</h1>
+
+<p>   这个加密是之前开发中使用DES，接过没办法做到多方通用（iOS、JAVA、NET、..），本身自己对加密这块也不熟悉，就没继续研究DES，使用AES加密打到了多方通用的要求。不过，好像AES的加密要比DES更严格一些？？？不是很清楚。代码记录如下：</p>
+
+<ul>
+<li>AES.h</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;CommonCrypto/CommonDigest.h&gt;</span>
+</span><span class='line'><span class="cp">#import &lt;CommonCrypto/CommonCryptor.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define kChosenCipherBlockSize   kCCBlockSizeAES128</span>
+</span><span class='line'><span class="cp">#define kChosenCipherKeySize kCCKeySizeAES128</span>
+</span><span class='line'><span class="cp">#define kChosenDigestLength      CC_SHA1_DIGEST_LENGTH</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">AES</span> : <span class="nc">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">sharedAESUtils</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//aes解密</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">decrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">encryptString</span> <span class="nf">aesKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyString</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//aes加密</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">encrypt:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">valueString</span> <span class="nf">aesKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyString</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">encrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">decrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">doCipher:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span>
+</span><span class='line'>           <span class="nf">context:</span><span class="p">(</span><span class="n">CCOperation</span><span class="p">)</span><span class="nv">encryptOrDecrypt</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>AES.m</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;AES.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">AES</span>
+</span><span class='line'><span class="n">CCOptions</span> <span class="n">padding</span> <span class="o">=</span> <span class="n">kCCOptionPKCS7Padding</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">sharedAESUtils</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="n">AES</span> <span class="o">*</span><span class="n">sharedAES</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">sharedAES</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">self</span> <span class="n">class</span><span class="p">]</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">sharedAES</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//aes解密</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">decrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">encryptNSData</span> <span class="nf">aesKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyString</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">keyData</span> <span class="o">=</span> <span class="p">[</span><span class="n">keyString</span> <span class="nl">dataUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">decryptData</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AES</span> <span class="n">sharedAESUtils</span><span class="p">]</span> <span class="nl">decrypt:</span><span class="n">encryptNSData</span> <span class="nl">key:</span><span class="n">keyData</span> <span class="nl">padding:</span><span class="o">&amp;</span><span class="n">padding</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">decryptData</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//aes加密</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">encrypt:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">valueString</span> <span class="nf">aesKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyString</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">keyData</span> <span class="o">=</span> <span class="p">[</span><span class="n">keyString</span> <span class="nl">dataUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">_secretData</span> <span class="o">=</span> <span class="p">[</span><span class="n">valueString</span> <span class="nl">dataUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">encryptedData</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AES</span> <span class="n">sharedAESUtils</span><span class="p">]</span> <span class="nl">encrypt:</span><span class="n">_secretData</span> <span class="nl">key:</span><span class="n">keyData</span> <span class="nl">padding:</span><span class="o">&amp;</span><span class="n">padding</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">encryptedData</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">encrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="nl">doCipher:</span><span class="n">plainText</span> <span class="nl">key:</span><span class="n">aSymmetricKey</span> <span class="nl">context:</span><span class="n">kCCEncrypt</span> <span class="nl">padding:</span><span class="n">pkcs7</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">decrypt:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="nl">doCipher:</span><span class="n">plainText</span> <span class="nl">key:</span><span class="n">aSymmetricKey</span> <span class="nl">context:</span><span class="n">kCCDecrypt</span> <span class="nl">padding:</span><span class="n">pkcs7</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nf">doCipher:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">plainText</span> <span class="nf">key:</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">aSymmetricKey</span>
+</span><span class='line'>           <span class="nf">context:</span><span class="p">(</span><span class="n">CCOperation</span><span class="p">)</span><span class="nv">encryptOrDecrypt</span> <span class="nf">padding:</span><span class="p">(</span><span class="n">CCOptions</span> <span class="o">*</span><span class="p">)</span><span class="nv">pkcs7</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CCCryptorStatus</span> <span class="n">ccStatus</span> <span class="o">=</span> <span class="n">kCCSuccess</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Symmetric crypto reference.</span>
+</span><span class='line'>    <span class="n">CCCryptorRef</span> <span class="n">thisEncipher</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Cipher Text container.</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span> <span class="n">cipherOrPlainText</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Pointer to output buffer.</span>
+</span><span class='line'>    <span class="n">uint8_t</span> <span class="o">*</span> <span class="n">bufferPtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Total size of the buffer.</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">bufferPtrSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Remaining bytes to be performed on.</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">remainingBytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Number of bytes moved to buffer.</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">movedBytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Length of plainText buffer.</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">plainTextBufferSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Placeholder for total written.</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">totalBytesWritten</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// A friendly helper pointer.</span>
+</span><span class='line'>    <span class="n">uint8_t</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Initialization vector; dummy in this case 0&#39;s.</span>
+</span><span class='line'>    <span class="n">uint8_t</span> <span class="n">iv</span><span class="p">[</span><span class="n">kChosenCipherBlockSize</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">iv</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">iv</span><span class="p">));</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">plainTextBufferSize</span> <span class="o">=</span> <span class="p">[</span><span class="n">plainText</span> <span class="n">length</span><span class="p">];</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Create and Initialize the crypto reference.</span>
+</span><span class='line'>    <span class="n">ccStatus</span> <span class="o">=</span> <span class="n">CCCryptorCreate</span><span class="p">(</span><span class="n">encryptOrDecrypt</span><span class="p">,</span>
+</span><span class='line'>                               <span class="n">kCCAlgorithmAES128</span><span class="p">,</span>
+</span><span class='line'>                               <span class="o">*</span><span class="n">pkcs7</span><span class="p">,</span>
+</span><span class='line'>                               <span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)[</span><span class="n">aSymmetricKey</span> <span class="n">bytes</span><span class="p">],</span>
+</span><span class='line'>                               <span class="n">kChosenCipherKeySize</span><span class="p">,</span>
+</span><span class='line'>                               <span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">iv</span><span class="p">,</span>
+</span><span class='line'>                               <span class="o">&amp;</span><span class="n">thisEncipher</span>
+</span><span class='line'>                               <span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Calculate byte block alignment for all calls through to and including final.</span>
+</span><span class='line'>    <span class="n">bufferPtrSize</span> <span class="o">=</span> <span class="n">CCCryptorGetOutputLength</span><span class="p">(</span><span class="n">thisEncipher</span><span class="p">,</span> <span class="n">plainTextBufferSize</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Allocate buffer.</span>
+</span><span class='line'>    <span class="n">bufferPtr</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span> <span class="n">bufferPtrSize</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint8_t</span><span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Zero out buffer.</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">bufferPtr</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="n">bufferPtrSize</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Initialize some necessary book keeping.</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">ptr</span> <span class="o">=</span> <span class="n">bufferPtr</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Set up initial size.</span>
+</span><span class='line'>    <span class="n">remainingBytes</span> <span class="o">=</span> <span class="n">bufferPtrSize</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Actually perform the encryption or decryption.</span>
+</span><span class='line'>    <span class="n">ccStatus</span> <span class="o">=</span> <span class="n">CCCryptorUpdate</span><span class="p">(</span><span class="n">thisEncipher</span><span class="p">,</span>
+</span><span class='line'>                               <span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">[</span><span class="n">plainText</span> <span class="n">bytes</span><span class="p">],</span>
+</span><span class='line'>                               <span class="n">plainTextBufferSize</span><span class="p">,</span>
+</span><span class='line'>                               <span class="n">ptr</span><span class="p">,</span>
+</span><span class='line'>                               <span class="n">remainingBytes</span><span class="p">,</span>
+</span><span class='line'>                               <span class="o">&amp;</span><span class="n">movedBytes</span>
+</span><span class='line'>                               <span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Handle book keeping.</span>
+</span><span class='line'>    <span class="n">ptr</span> <span class="o">+=</span> <span class="n">movedBytes</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">remainingBytes</span> <span class="o">-=</span> <span class="n">movedBytes</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">totalBytesWritten</span> <span class="o">+=</span> <span class="n">movedBytes</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="c1">// Finalize everything to the output buffer.</span>
+</span><span class='line'>    <span class="n">ccStatus</span> <span class="o">=</span> <span class="n">CCCryptorFinal</span><span class="p">(</span><span class="n">thisEncipher</span><span class="p">,</span>
+</span><span class='line'>                              <span class="n">ptr</span><span class="p">,</span>
+</span><span class='line'>                              <span class="n">remainingBytes</span><span class="p">,</span>
+</span><span class='line'>                              <span class="o">&amp;</span><span class="n">movedBytes</span>
+</span><span class='line'>                              <span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">totalBytesWritten</span> <span class="o">+=</span> <span class="n">movedBytes</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">thisEncipher</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">CCCryptorRelease</span><span class="p">(</span><span class="n">thisEncipher</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">thisEncipher</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">ccStatus</span> <span class="o">==</span> <span class="n">kCCSuccess</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">cipherOrPlainText</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSData</span> <span class="nl">dataWithBytes:</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">bufferPtr</span> <span class="nl">length:</span><span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="n">totalBytesWritten</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">cipherOrPlainText</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">bufferPtr</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">bufferPtr</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">return</span> <span class="n">cipherOrPlainText</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>RSA</h1>
+
+<p>iOS上并没有直接的RSA加密API。但是iOS提供了x509的API，而x509是支持RSA加密的。</p>
+
+<h3>生成RSA秘钥对</h3>
+
+<p>如果没有现成证书可用，可以使用openssl自签名证书，步骤如下：</p>
+
+<ul>
+<li>创建私钥</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl genrsa -out self_private_key.pem 1024
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<ul>
+<li>创建证书</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl req -new -out cert.csr -key self_private_key.pem
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>自签署根证书</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl x509 -req -in cert.csr -out self_public_key.der -outform der -signkey self_private_key.pem -days 3650
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述三步可以简化为一个命令：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl req -x509 -out self_public_key.der -outform der -new -newkey rsa:1024 -keyout self_private_key.pem -days 3650
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>几个说明：</p>
+
+<ul>
+<li>self_public_key.der是输出的自签名的x509证书，即我们要用的。</li>
+<li>self_private_key.pem是输出的私钥，用来解密的，请妥善保管。</li>
+<li>rsa:1024这里的1024是密钥长度，1024是比较安全的，如果需要更安全的话，可以用2048，但是加解密代价也会增加。</li>
+<li>-days：证书过期时间，一定要加上这个参数，默认的证书过期时间是30天，一般我们不希望证书这么短就过期，所以写上比较合适的天数，例如这里的3650(10年)。</li>
+</ul>
+
+
+<p>这是运行结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>//下面提示密码的地方必须输入
+</span><span class='line'>openssl req -x509 -out self_public_key.der -outform der -new -newkey rsa:1024 -keyout self_private_key.pem -days 3650
+</span><span class='line'>Generating a 1024 bit RSA private key
+</span><span class='line'>............................++++++
+</span><span class='line'>...................................................................................................................................++++++
+</span><span class='line'>writing new private key to <span class="s1">&#39;self_private_key.pem&#39;</span>
+</span><span class='line'>Enter PEM pass phrase:
+</span><span class='line'>Verifying - Enter PEM pass phrase:
+</span><span class='line'>-----
+</span><span class='line'>You are about to be asked to enter information that will be incorporated
+</span><span class='line'>into your certificate request.
+</span><span class='line'>What you are about to enter is what is called a Distinguished Name or a DN.
+</span><span class='line'>There are quite a few fields but you can leave some blank
+</span><span class='line'>For some fields there will be a default value,
+</span><span class='line'>If you enter <span class="s1">&#39;.&#39;</span>, the field will be left blank.
+</span><span class='line'>-----
+</span><span class='line'>Country Name <span class="o">(</span>2 letter code<span class="o">)</span> <span class="o">[</span>AU<span class="o">]</span>:CN
+</span><span class='line'>State or Province Name <span class="o">(</span>full name<span class="o">)</span> <span class="o">[</span>Some-State<span class="o">]</span>:Shanghai
+</span><span class='line'>Locality Name <span class="o">(</span>eg, city<span class="o">)</span> <span class="o">[]</span>:Shanghai
+</span><span class='line'>Organization Name <span class="o">(</span>eg, company<span class="o">)</span> <span class="o">[</span>Internet Widgits Pty Ltd<span class="o">]</span>:xdy
+</span><span class='line'>Organizational Unit Name <span class="o">(</span>eg, section<span class="o">)</span> <span class="o">[]</span>:xdy
+</span><span class='line'>Common Name <span class="o">(</span>eg, YOUR name<span class="o">)</span> <span class="o">[]</span>:xdy
+</span><span class='line'>Email Address <span class="o">[]</span>:xdy@qq.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意:iOS只能处理DER格式(二进制格式,后缀名为der、cer、crt)的证书,如果您的证书是PEM格式(文本格式,后缀名为pem、cer、crt)的，则可用下面命令转换</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>//此处pem不是上面的key，而是最后导出的pem根证书，不然执行下面的命令会报错的
+</span><span class='line'>//，因为这是2个不同格式的证书进行转化
+</span><span class='line'>openssl x509 -in xxxx.pem -inform pem -out xxxx.der -outform der
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Xcode中使用公钥加密</h3>
+
+<ul>
+<li>导入Security.framework框架</li>
+<li>将self_public_key.der加入到Xcode项目工程中</li>
+<li>添加如下方法：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span><span class="p">(</span><span class="n">SecKeyRef</span><span class="p">)</span><span class="nf">getPublicSecKey</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="cm">/* Open and parse the cert*/</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">certData</span> <span class="o">=</span><span class="p">[</span><span class="n">NSData</span> <span class="nl">dataWithContentsOfFile:</span><span class="p">[[</span><span class="n">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource:</span><span class="s">@&quot;self_public_key&quot;</span> <span class="nl">ofType:</span><span class="s">@&quot;der&quot;</span><span class="p">]];</span>
+</span><span class='line'>    <span class="n">SecCertificateRef</span> <span class="n">cert</span> <span class="o">=</span><span class="n">SecCertificateCreateWithData</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,(</span><span class="n">__bridge</span> <span class="n">CFDataRef</span><span class="p">)</span><span class="n">certData</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">SecPolicyRef</span> <span class="n">policy</span> <span class="o">=</span><span class="n">SecPolicyCreateBasicX509</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">SecTrustRef</span> <span class="n">trust</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">OSStatus</span> <span class="n">status</span> <span class="o">=</span><span class="n">SecTrustCreateWithCertificates</span><span class="p">(</span><span class="n">cert</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span><span class="o">&amp;</span><span class="n">trust</span><span class="p">);</span>
+</span><span class='line'>    <span class="cm">/* You can ignore the SecTrustResultType, but you have to run SecTrustEvaluate                                                                                                                                                                                                                                                                                                                                                                   * before you can get the public key */</span>
+</span><span class='line'>    <span class="n">SecTrustResultType</span> <span class="n">trustResult</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">noErr</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">status</span> <span class="o">=</span><span class="n">SecTrustEvaluate</span><span class="p">(</span><span class="n">trust</span><span class="p">,</span><span class="o">&amp;</span><span class="n">trustResult</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* Now grab the public key from the cert */</span>
+</span><span class='line'>    <span class="n">SecKeyRef</span> <span class="n">publicKey</span> <span class="o">=</span><span class="n">SecTrustCopyPublicKey</span><span class="p">(</span><span class="n">trust</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* Free the Security Framework! */</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">cert</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">policy</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">trust</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">publicKey</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span><span class="p">(</span><span class="n">NSData</span><span class="o">*</span><span class="p">)</span><span class="nf">encryptWithData:</span><span class="p">(</span><span class="n">NSData</span><span class="o">*</span><span class="p">)</span><span class="nv">content</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">SecKeyRef</span> <span class="n">publicKey</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getPublicSecKey</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/*Your plain text string is shorter than the block size in cipherBufferLength,</span>
+</span><span class='line'><span class="cm">     *else you&#39;ll need to split it into blocks of that size*/</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="n">content</span> <span class="n">length</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">cipherBufferSize</span> <span class="o">=</span> <span class="n">SecKeyGetBlockSize</span><span class="p">(</span><span class="n">publicKey</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">cipherBufferSize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;content is too long&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* in case inputData is released before we&#39;re done... */</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">bytes</span> <span class="o">=</span> <span class="p">[</span><span class="n">content</span> <span class="n">bytes</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">uint8_t</span> <span class="o">*</span><span class="n">plainText</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">length</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">memcpy</span><span class="p">(</span><span class="n">plainText</span><span class="p">,</span> <span class="n">bytes</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">uint8_t</span> <span class="o">*</span><span class="n">cipherBuffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">cipherBufferSize</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">cipherBuffer</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="n">cipherBufferSize</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* encrypt!! */</span>
+</span><span class='line'>    <span class="n">NSData</span> <span class="o">*</span><span class="n">resultData</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">OSStatus</span> <span class="n">returnCode</span> <span class="o">=</span> <span class="n">SecKeyEncrypt</span><span class="p">(</span><span class="n">publicKey</span><span class="p">,</span> <span class="n">kSecPaddingPKCS1</span><span class="p">,</span> <span class="n">plainText</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">cipherBuffer</span><span class="p">,</span><span class="o">&amp;</span><span class="n">cipherBufferSize</span><span class="p">);</span>
+</span><span class='line'>    <span class="cm">/* Do something with your cipher text...like convert it to an NSData object,</span>
+</span><span class='line'><span class="cm">     base64 encode it and send it to your server.  Check here for some good b64</span>
+</span><span class='line'><span class="cm">     routines: https://github.com/mikeho/QSUtilities/blob/master/QSStrings.m</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">returnCode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">resultData</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSData</span> <span class="nl">dataWithBytes:</span><span class="n">cipherBuffer</span> <span class="nl">length:</span><span class="n">cipherBufferSize</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">publicKey</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">cipherBuffer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">plainText</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">resultData</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>然后可将加密后的NSData进行HEX或者Base64编码，变成NSString进行传输。也可直接二进制使用</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T11:26:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+	<p class="meta">
+		原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+	</p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <style>
+    .flash-video{display:none;}
+</style>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_renren">人人网</a>
+	<a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1729167" async=""></script>
+<!-- UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/10/connection-https-ssl-with-nsurlconnection/" title="Previous Post: 使用NSURLConnection请求HTTPS(SSL)接口">&laquo; 使用NSURLConnection请求HTTPS(SSL)接口</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/10/nsstring-usage/" title="Next Post: NSString的一些使用扩展">NSString的一些使用扩展 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/ios-ui-design/">iOS界面设计切图小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/10/tools-error-handling/">开发工具错误及解决汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>现沪江网移动开发负责</p>
+  <p>JAVA开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾开发开心词场、沪江小D等移动APP</p>
+</section>
+<section>
+  <h1>其他博客</h1>
+  <p><a href="http://timroadley.com/">Tim Roadley</a></p>
+  <p><a href="http://blog.devtang.com/">唐巧的技术博客</a></p>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

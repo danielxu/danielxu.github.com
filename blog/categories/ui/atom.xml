@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: UI | 个人博客]]></title>
+  <link href="http://danielxu.github.com/blog/categories/ui/atom.xml" rel="self"/>
+  <link href="http://danielxu.github.com/"/>
+  <updated>2013-11-30T17:47:12+08:00</updated>
+  <id>http://danielxu.github.com/</id>
+  <author>
+    <name><![CDATA[徐大雨]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS界面设计切图小结]]></title>
+    <link href="http://danielxu.github.com/blog/2013/04/12/ios-ui-design/"/>
+    <updated>2013-04-12T11:24:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/04/12/ios-ui-design</id>
+    <content type="html"><![CDATA[<h2>1.基本尺寸</h2>
+
+<h3>（1）界面</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_1.png"></p>
+
+<p>实际设计时按：</p>
+
+<ul>
+<li>iPhone4、4s：640px*960px</li>
+<li>iPhone5:  640px*1136px</li>
+<li>iPad：1536px*2048px</li>
+</ul>
+
+
+<h3>(2) 图标：</h3>
+
+<ul>
+<li>1024px*1024px  圆角180px</li>
+<li>提交1024px*1024px 方角 png格式图片</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>2.图形部件及字体</h2>
+
+<h3>（1） 为显示清晰</h3>
+
+<ul>
+<li>所有图形部件尺寸必须为偶数</li>
+<li>样式中阴影、发光、描边的数值也必须为偶数</li>
+</ul>
+
+
+<h3>（2） 为方便用户点击</h3>
+
+<ul>
+<li>所有可点击的部件需大于88px*88px</li>
+<li>若图片本身不够，可在切图时补足空白像素
+例如：<img src="/images/uidesign/iOS_ui_design_2.png"></li>
+</ul>
+
+
+<h3>（3）为减小程序体积</h3>
+
+<p>建议尽量使用可平铺图案设计界面</p>
+
+<h3>（4）苹果默认字体</h3>
+
+<p>在pc上没有完全一样的字体，Hiragino Sans GB苹果丽黑最相近
+一般做效果图时，用Hiragino Sans GB（包括中英文）代替即可，也可以用方正黑体代替</p>
+
+<ul>
+<li>所有字体使用偶数字号进行设计</li>
+<li>苹果丽黑有W3、W6两种粗细的字体</li>
+</ul>
+
+
+<p><img src="/images/uidesign/iOS_ui_design_3.png"></p>
+
+<p>附下载地址：<a href="http://www.iplaysoft.com/hiragino-sans.html">苹果丽黑</a></p>
+
+<h3>（5）系统可以做到如下字体效果</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_4.png"></p>
+
+<p>即，向特定方向1px（做效果图时做2px的效果）投影，需给出字体颜色、阴影颜色。
+一般不建议按钮上的文字做特殊效果。如果必要， 需将字体和按钮一起切图。</p>
+
+<h3>（6）导航栏中的文字一般为40点W6</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_5.png"></p>
+
+<h2>3.切图提示</h2>
+
+<h3>(1）所有切图必须为偶数</h3>
+
+<p>先根据Retina屏幕切图（即640<em>960/640</em>1136/1536*2048），后将切图缩为普通屏幕尺寸。
+（有特殊图片需要单独制作）</p>
+
+<h3>（2）可平铺部件切图时可如下图：</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_6.png"></p>
+
+<p>带圆角按钮切图时可如下图</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_7.png"></p>
+
+<p>同理</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_8.png"></p>
+
+<p>并在效果图中标出具体大小</p>
+
+<p>标注软件推荐：<a href="http://www.appinn.com/dorado/">dorado</a></p>
+
+<h3>（3）导航栏和标签栏下的阴影程序可以自动生成，可不切，如图：</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_9.png"></p>
+
+<p><img src="/images/uidesign/iOS_ui_design_10.png"></p>
+
+<p>若不满意默认阴影效果，可以单独切2px宽的阴影，如图：</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_11.png"></p>
+
+<p>如有异形阴影如：</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_12.png"></p>
+
+<p>需切整条阴影，并与攻城师说明。</p>
+
+<h3>（4）所有按钮需有两种状态——正常状态和按下状态</h3>
+
+<h3>（6）一般情况下切图格式为png24</h3>
+
+<ul>
+<li>若个别图片jpg比png小很多，可用jpg</li>
+<li>但欢迎页、icon必须为png，在不影响显示效果的前提下，可以考虑用png8</li>
+</ul>
+
+
+<h2>4.命名</h2>
+
+<h3>（1）图片命名后缀</h3>
+
+<ul>
+<li><p>根据Retina屏幕的切图文件名后加@2x，普通屏幕尺寸不用加。</p></li>
+<li><p>欢迎页、背景等需要对iPhone5另外切图的文件名后加-568h@2x</p></li>
+</ul>
+
+
+<h3>（2）命名建议</h3>
+
+<p>建议采用如下方法命名，如：</p>
+
+<p><code>
+切图性质_功能相关描述_图片描述（可无）_状态说明（可无）@2x.png
+</code></p>
+
+<p>用例:</p>
+
+<ul>
+<li>Retina屏幕切图</li>
+</ul>
+
+
+<p><code>
+bg_booksnum_pressed@2x.png
+ico_arrow_blue@2x.png
+btn_blue_pressed@2x.png
+pic_books_blue@2x.png
+bg_main-568h@2x.png
+</code></p>
+
+<ul>
+<li>普通屏幕切图</li>
+</ul>
+
+
+<p><code>
+​bg_booksnum_pressed.png
+ico_arrow_blue.png
+btn_blue_pressed.png
+pic_books_blue.png
+按下状态切图命名后加_pressed
+</code>
+* 另外贴个建议命名备忘</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_13.png"></p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="/files/uidesign/iOS_UI_design_1.pdf">iOS交互设计指南翻译</a></li>
+<li><a href="http://developer.apple.com/library/ios/#documentation/userexperience/conceptual/mobilehig/IconsImages/IconsImages.html">iOS设计指南·官方</a></li>
+<li><a href="http://iconhandbook.co.uk/reference/chart/">iconhandbook</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

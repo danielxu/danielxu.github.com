@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UIViewController加载与销毁 - 个人博客</title>
+  <meta name="author" content="徐大雨">
+
+  
+  <meta name="description" content="感觉这个标题更合适一些，引用delphi090902的blog view有两个重要circle 加载 view（属性） 每一个UIViewController都会有property，叫“view”，这是default的，在UIViewController初始化后，当程序某部分访问view时， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danielxu.github.com/blog/2013/01/11/uiviewcontroller-life-cycle/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/favicon.ico" type="image/vnd.microsoft.icon" rel="icon"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="个人博客" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">个人博客</a></h1>
+  
+    <h2>随时记录下自己的点滴.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danielxu.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">UIViewController加载与销毁</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-11T11:37:00+08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h5>感觉这个标题更合适一些，引用<a href="http://blog.csdn.net/delphi090902/article/details/6936082">delphi090902</a>的blog</h5>
+
+<h1>view有两个重要circle</h1>
+
+<h2>加载</h2>
+
+<ul>
+<li><p><strong>view（属性）</strong> 每一个UIViewController都会有property，叫“view”，这是default的，在UIViewController初始化后，当程序某部分访问view时，这时如果view是没有在内存中存在，view controller会调用loadView方法。</p></li>
+<li><p><strong>loadView</strong> 只有在你在代码中创建实现你的view时需要在对应UIViewController里重写该方法。</p>
+
+<ul>
+<li>如果你重写了loadView，你需要创建所有相关的views，并且赋值view一个非nil值。</li>
+<li><p>如果你没有重写这个方法，默认初始化方式使用view controller的nibName和nibBundle属性来试图从一个专有的nib文件加载。</p>
+
+<ul>
+<li>如果没有找到那个专有的那个nib文件，默认会去找一个名字与view controller相匹配的nib文件去加载。</li>
+<li>如果没有有效的nib文件，默认实现最后会返回一个空view，并且赋值给view。</li>
+</ul>
+</li>
+<li><p><strong>注意：</strong>不要<code>[super loadView]</code>，减少不必要的资源消耗</p></li>
+</ul>
+</li>
+<li><p><strong>viewDidLoad</strong> 无论你是否用Interface Builder创建nib文件创建UIViewController ，这个方法都会被调用的。它是用来做一些额外在你架子啊你的view时需要做的任务。</p></li>
+<li><p><strong>viewDidUnload</strong> 如果在UIViewController里存储了IBOutlet，和UIView或者其子类，在viewDidUnload里都要赋值它们为nil，用self.xxx方式，因为这同时会出发setter里的release方法。否则会有leak。</p></li>
+</ul>
+
+
+<!--more-->
+
+
+<p><img src="/images/viewcontroller/viewcontroller_load.gif" title="Load" alt="UIViewController load cycle" /></p>
+
+<h2>卸载</h2>
+
+<p>view被卸载发生在程序收到系统的low memory warning时。</p>
+
+<p>每一个view controller都会调用自己的<code>didReceiveMemoryWarning</code>方法。</p>
+
+<p>如果你重写了这个方法，你需要release掉所有你的view controller不在使用的自定义数据。一定不要在这个方法里release你view controller的view property。你必须要使用super方法来执行一些默认操作。</p>
+
+<p>默认实现是只release那些执行release操作安全的view。</p>
+
+<p>如果view controller release它的view，它会调用viewDidUnload方法，你可以重写这个方法来实现一些额外的清除你的views工作。</p>
+
+<p><img src="/images/viewcontroller/viewcontroller_unload.gif" title="UnLoad" alt="UIViewController unload cycle" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-11T11:37:00+08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+	<p class="meta">
+		原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+	</p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <style>
+    .flash-video{display:none;}
+</style>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_renren">人人网</a>
+	<a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1729167" async=""></script>
+<!-- UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/10/nsstring-usage/" title="Previous Post: NSString的一些使用扩展">&laquo; NSString的一些使用扩展</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/14/how-to-compile-tesseract-ocr-source-code-for-ios/" title="Next Post: 编译tesseract-ocr（For iOS引擎）">编译tesseract-ocr（For iOS引擎） &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/ios-ui-design/">iOS界面设计切图小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/10/tools-error-handling/">开发工具错误及解决汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>现沪江网移动开发负责</p>
+  <p>JAVA开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾开发开心词场、沪江小D等移动APP</p>
+</section>
+<section>
+  <h1>其他博客</h1>
+  <p><a href="http://timroadley.com/">Tim Roadley</a></p>
+  <p><a href="http://blog.devtang.com/">唐巧的技术博客</a></p>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

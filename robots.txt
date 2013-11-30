@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://danielxu.github.com/sitemap.xml 

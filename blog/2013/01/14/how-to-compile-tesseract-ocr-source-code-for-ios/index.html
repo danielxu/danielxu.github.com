@@ -1,0 +1,1161 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>编译tesseract-ocr（For iOS引擎） - 个人博客</title>
+  <meta name="author" content="徐大雨">
+
+  
+  <meta name="description" content="编译的过程中需要一些额外的组件，有可能MAC下没有，我的电脑上是下面的这些需要安装。如有不同，可自行查找错误信息，安装缺失的工具。 参考：http://tinsuke.wordpress.com/2011/11/01/how-to-compile-and-use-tesseract-3-01-on &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danielxu.github.com/blog/2013/01/14/how-to-compile-tesseract-ocr-source-code-for-ios/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/favicon.ico" type="image/vnd.microsoft.icon" rel="icon"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="个人博客" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">个人博客</a></h1>
+  
+    <h2>随时记录下自己的点滴.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danielxu.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">编译tesseract-ocr（For iOS引擎）</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-14T10:52:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>编译的过程中需要一些额外的组件，有可能MAC下没有，我的电脑上是下面的这些需要安装。如有不同，可自行查找错误信息，安装缺失的工具。</p>
+
+<p>参考：<a href="http://tinsuke.wordpress.com/2011/11/01/how-to-compile-and-use-tesseract-3-01-on-ios-sdk-5/">http://tinsuke.wordpress.com/2011/11/01/how-to-compile-and-use-tesseract-3-01-on-ios-sdk-5/</a></p>
+
+<h1>MAC下安装autoconf和automake</h1>
+
+<ul>
+<li>安装m4</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://mirrors.kernel.org/gnu/m4/m4-1.4.16.tar.gz
+</span><span class='line'>tar -xzvf m4-1.4.16.tar.gz
+</span><span class='line'><span class="nb">cd </span>m4-1.4.16
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/local
+</span><span class='line'>make
+</span><span class='line'>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装autoconf</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://mirrors.kernel.org/gnu/autoconf/autoconf-2.69.tar.gz
+</span><span class='line'>tar -xzvf autoconf-2.69.tar.gz
+</span><span class='line'><span class="nb">cd </span>autoconf-2.69
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/local
+</span><span class='line'>make
+</span><span class='line'>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装automake</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://mirrors.kernel.org/gnu/automake/automake-1.13.tar.gz
+</span><span class='line'>tar -xzvf automake-1.13.tar.gz
+</span><span class='line'><span class="nb">cd </span>automake-1.13
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/local
+</span><span class='line'>make
+</span><span class='line'>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装libtool</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://mirrors.kernel.org/gnu/libtool/libtool-2.4.tar.gz
+</span><span class='line'>tar -xzvf libtool-2.4.tar.gz
+</span><span class='line'><span class="nb">cd </span>libtool-2.4
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/local
+</span><span class='line'>make
+</span><span class='line'>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<h1>编译<a href="http://code.google.com/p/tesseract-ocr/">tesseract</a></h1>
+
+<p>在本地新建一个文件夹，如：build_tesseract将下面2个主要组件下载解压到此文件夹下.命令如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir build_tesseract
+</span><span class='line'><span class="nb">cd </span>build_tesseract
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在此文件夹下进行下面的命令：</p>
+
+<ul>
+<li>tesseract-ocr-3.02</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
+</span><span class='line'>tar -xzvf tesseract-ocr-3.02.02.tar.gz
+</span><span class='line'>mv tesseract-ocr-3.02.02 tesseract-ocr-3.02
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>leptonica-1.69</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -O http://www.leptonica.com/source/leptonica-1.69.tar.gz
+</span><span class='line'>tar -xzvf leptonica-1.69.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>创建编译脚本 build.sh</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="c"># build.sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">GLOBAL_OUTDIR</span><span class="o">=</span><span class="s2">&quot;`pwd`/dependencies&quot;</span>
+</span><span class='line'><span class="nv">LOCAL_OUTDIR</span><span class="o">=</span><span class="s2">&quot;./outdir&quot;</span>
+</span><span class='line'><span class="nv">LEPTON_LIB</span><span class="o">=</span><span class="s2">&quot;`pwd`/leptonica-1.69&quot;</span>
+</span><span class='line'><span class="nv">TESSERACT_LIB</span><span class="o">=</span><span class="s2">&quot;`pwd`/tesseract-3.02&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">IOS_BASE_SDK</span><span class="o">=</span><span class="s2">&quot;6.0&quot;</span>
+</span><span class='line'><span class="nv">IOS_DEPLOY_TGT</span><span class="o">=</span><span class="s2">&quot;4.3&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#设置参数</span>
+</span><span class='line'>setenv_all<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>        <span class="c"># Add internal libs</span>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;$CFLAGS -I$GLOBAL_OUTDIR/include -L$GLOBAL_OUTDIR/lib&quot;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">CXX</span><span class="o">=</span><span class="s2">&quot;$DEVROOT/usr/bin/llvm-g++&quot;</span>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">CC</span><span class="o">=</span><span class="s2">&quot;$DEVROOT/usr/bin/llvm-gcc&quot;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">LD</span><span class="o">=</span><span class="nv">$DEVROOT</span>/usr/bin/ld
+</span><span class='line'>        <span class="nb">export </span><span class="nv">AR</span><span class="o">=</span><span class="nv">$DEVROOT</span>/usr/bin/ar
+</span><span class='line'>        <span class="nb">export </span><span class="nv">AS</span><span class="o">=</span><span class="nv">$DEVROOT</span>/usr/bin/as
+</span><span class='line'>        <span class="nb">export </span><span class="nv">NM</span><span class="o">=</span><span class="nv">$DEVROOT</span>/usr/bin/nm
+</span><span class='line'>        <span class="nb">export </span><span class="nv">RANLIB</span><span class="o">=</span><span class="nv">$DEVROOT</span>/usr/bin/ranlib
+</span><span class='line'>        <span class="nb">export </span><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-L$SDKROOT/usr/lib/&quot;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">CPPFLAGS</span><span class="o">=</span><span class="nv">$CFLAGS</span>
+</span><span class='line'>        <span class="nb">export </span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="nv">$CFLAGS</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#编译armv7</span>
+</span><span class='line'>setenv_arm7<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nb">unset </span>DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">DEVROOT</span><span class="o">=</span>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+</span><span class='line'>    <span class="nb">export </span><span class="nv">SDKROOT</span><span class="o">=</span><span class="nv">$DEVROOT</span>/SDKs/iPhoneOS<span class="nv">$IOS_BASE_SDK</span>.sdk
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-arch armv7 -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    setenv_all
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>setenv_arm7s<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nb">unset </span>DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">DEVROOT</span><span class="o">=</span>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+</span><span class='line'>    <span class="nb">export </span><span class="nv">SDKROOT</span><span class="o">=</span><span class="nv">$DEVROOT</span>/SDKs/iPhoneOS<span class="nv">$IOS_BASE_SDK</span>.sdk
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-arch armv7s -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT -I$SDKROOT/usr/include/&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    setenv_all
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#编译i386</span>
+</span><span class='line'>setenv_i386<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nb">unset </span>DEVROOT SDKROOT CFLAGS CC LD CPP CXX AR AS NM CXXCPP RANLIB LDFLAGS CPPFLAGS CXXFLAGS
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">DEVROOT</span><span class="o">=</span>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+</span><span class='line'>    <span class="nb">export </span><span class="nv">SDKROOT</span><span class="o">=</span><span class="nv">$DEVROOT</span>/SDKs/iPhoneSimulator<span class="nv">$IOS_BASE_SDK</span>.sdk
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-arch i386 -pipe -no-cpp-precomp -isysroot $SDKROOT -miphoneos-version-min=$IOS_DEPLOY_TGT&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    setenv_all
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#合并为一个库</span>
+</span><span class='line'>create_outdir_lipo<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="k">for </span>lib_i386 in <span class="sb">`</span>find <span class="nv">$LOCAL_OUTDIR</span>/i386 -name <span class="s2">&quot;lib*.a&quot;</span><span class="sb">`</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">        </span><span class="nv">lib_arm7</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$lib_i386</span> | sed <span class="s2">&quot;s/i386/arm7/g&quot;</span><span class="sb">`</span>
+</span><span class='line'>        <span class="nv">lib_arm7s</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$lib_i386</span> | sed <span class="s2">&quot;s/i386/arm7s/g&quot;</span><span class="sb">`</span>
+</span><span class='line'>        <span class="nv">lib</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$lib_i386</span> | sed <span class="s2">&quot;s/i386//g&quot;</span><span class="sb">`</span>
+</span><span class='line'>        xcrun -sdk iphoneos lipo -arch armv7s <span class="nv">$lib_arm7s</span> -arch armv7 <span class="nv">$lib_arm7</span> -arch i386 <span class="nv">$lib_i386</span> -create -output <span class="nv">$lib</span>
+</span><span class='line'>    <span class="k">done</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>merge_libfiles<span class="o">()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nv">DIR</span><span class="o">=</span><span class="nv">$1</span>
+</span><span class='line'>    <span class="nv">LIBNAME</span><span class="o">=</span><span class="nv">$2</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">cd</span> <span class="nv">$DIR</span>
+</span><span class='line'>    <span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;lib*.a&quot;</span><span class="sb">`</span>; <span class="k">do</span>
+</span><span class='line'>        <span class="nv">$AR</span> -x <span class="nv">$i</span>
+</span><span class='line'>    <span class="k">done</span>
+</span><span class='line'>    <span class="nv">$AR</span> -r <span class="nv">$LIBNAME</span> *.o
+</span><span class='line'>    rm -rf *.o __*
+</span><span class='line'>    <span class="nb">cd</span> -
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#######################</span>
+</span><span class='line'><span class="c"># LEPTONLIB</span>
+</span><span class='line'><span class="c">#######################</span>
+</span><span class='line'><span class="nb">cd</span> <span class="nv">$LEPTON_LIB</span>
+</span><span class='line'>rm -rf <span class="nv">$LOCAL_OUTDIR</span>
+</span><span class='line'>mkdir -p <span class="nv">$LOCAL_OUTDIR</span>/arm7 <span class="nv">$LOCAL_OUTDIR</span>/i386 <span class="nv">$LOCAL_OUTDIR</span>/arm7s
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_arm7
+</span><span class='line'>./configure --host<span class="o">=</span>arm-apple-darwin7 --enable-shared<span class="o">=</span>no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+</span><span class='line'>make -j12
+</span><span class='line'>cp -rvf src/.libs/lib*.a <span class="nv">$LOCAL_OUTDIR</span>/arm7
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_arm7s
+</span><span class='line'>./configure --host<span class="o">=</span>arm-apple-darwin7s --enable-shared<span class="o">=</span>no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+</span><span class='line'>make -j12
+</span><span class='line'>cp -rvf src/.libs/lib*.a <span class="nv">$LOCAL_OUTDIR</span>/arm7s
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_i386
+</span><span class='line'>./configure --enable-shared<span class="o">=</span>no --disable-programs --without-zlib --without-libpng --without-jpeg --without-giflib --without-libtiff
+</span><span class='line'>make -j12
+</span><span class='line'>cp -rvf src/.libs/lib*.a <span class="nv">$LOCAL_OUTDIR</span>/i386
+</span><span class='line'>
+</span><span class='line'>create_outdir_lipo
+</span><span class='line'>mkdir -p <span class="nv">$GLOBAL_OUTDIR</span>/include/leptonica <span class="o">&amp;&amp;</span> cp -rvf src/*.h <span class="nv">$GLOBAL_OUTDIR</span>/include/leptonica
+</span><span class='line'>mkdir -p <span class="nv">$GLOBAL_OUTDIR</span>/lib <span class="o">&amp;&amp;</span> cp -rvf <span class="nv">$LOCAL_OUTDIR</span>/lib*.a <span class="nv">$GLOBAL_OUTDIR</span>/lib
+</span><span class='line'><span class="nb">cd</span> ..
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#######################</span>
+</span><span class='line'><span class="c"># TESSERACT-OCR (v3)</span>
+</span><span class='line'><span class="c">#######################</span>
+</span><span class='line'><span class="nb">cd</span> <span class="nv">$TESSERACT_LIB</span>
+</span><span class='line'>rm -rf <span class="nv">$LOCAL_OUTDIR</span>
+</span><span class='line'>mkdir -p <span class="nv">$LOCAL_OUTDIR</span>/arm7 <span class="nv">$LOCAL_OUTDIR</span>/i386 <span class="nv">$LOCAL_OUTDIR</span>/arm7s
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_arm7
+</span><span class='line'>bash autogen.sh
+</span><span class='line'>./configure --host<span class="o">=</span>arm-apple-darwin7 --enable-shared<span class="o">=</span>no <span class="nv">LIBLEPT_HEADERSDIR</span><span class="o">=</span><span class="nv">$GLOBAL_OUTDIR</span>/include/
+</span><span class='line'>make -j12
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;lib*.a&quot;</span> | grep -v arm<span class="sb">`</span>; <span class="k">do </span>cp -rvf <span class="nv">$i</span> <span class="nv">$LOCAL_OUTDIR</span>/arm7; <span class="k">done</span>
+</span><span class='line'>merge_libfiles <span class="nv">$LOCAL_OUTDIR</span>/arm7 libtesseract_all.a
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_arm7s
+</span><span class='line'>bash autogen.sh
+</span><span class='line'>./configure --host<span class="o">=</span>arm-apple-darwin7s --enable-shared<span class="o">=</span>no <span class="nv">LIBLEPT_HEADERSDIR</span><span class="o">=</span><span class="nv">$GLOBAL_OUTDIR</span>/include/
+</span><span class='line'>make -j12
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;lib*.a&quot;</span> | grep -v arm<span class="sb">`</span>; <span class="k">do </span>cp -rvf <span class="nv">$i</span> <span class="nv">$LOCAL_OUTDIR</span>/arm7s; <span class="k">done</span>
+</span><span class='line'>merge_libfiles <span class="nv">$LOCAL_OUTDIR</span>/arm7s libtesseract_all.a
+</span><span class='line'>
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>setenv_i386
+</span><span class='line'>bash autogen.sh
+</span><span class='line'>./configure --enable-shared<span class="o">=</span>no <span class="nv">LIBLEPT_HEADERSDIR</span><span class="o">=</span><span class="nv">$GLOBAL_OUTDIR</span>/include/
+</span><span class='line'>make -j12
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;lib*.a&quot;</span> | grep -v arm<span class="sb">`</span>; <span class="k">do </span>cp -rvf <span class="nv">$i</span> <span class="nv">$LOCAL_OUTDIR</span>/i386; <span class="k">done</span>
+</span><span class='line'>merge_libfiles <span class="nv">$LOCAL_OUTDIR</span>/i386 libtesseract_all.a
+</span><span class='line'>
+</span><span class='line'>create_outdir_lipo
+</span><span class='line'>mkdir -p <span class="nv">$GLOBAL_OUTDIR</span>/include/tesseract
+</span><span class='line'><span class="nv">tess_inc</span><span class="o">=(</span> api/apitypes.h api/baseapi.h ccstruct/publictypes.h ccutil/errcode.h
+</span><span class='line'>           ccutil/genericvector.h ccutil/helpers.h ccutil/host.h ccutil/ndminx.h ccutil/ocrclass.h
+</span><span class='line'>           ccutil/platform.h ccutil/tesscallback.h ccutil/unichar.h ccutil/unicharmap.h ccutil/unicharset.h
+</span><span class='line'>           ccutil/strngs.h ccutil/memry.h ccmain/ltrresultiterator.h ccmain/pageiterator.h
+</span><span class='line'>           ccmain/resultiterator.h ccmain/thresholder.h <span class="o">)</span>
+</span><span class='line'><span class="k">for </span>i in <span class="s2">&quot;${tess_inc[@]}&quot;</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">   </span>cp -rvf <span class="nv">$i</span> <span class="nv">$GLOBAL_OUTDIR</span>/include/tesseract
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>mkdir -p <span class="nv">$GLOBAL_OUTDIR</span>/lib <span class="o">&amp;&amp;</span> cp -rvf <span class="nv">$LOCAL_OUTDIR</span>/lib*.a <span class="nv">$GLOBAL_OUTDIR</span>/lib
+</span><span class='line'>make clean 2&gt; /dev/null
+</span><span class='line'>make distclean 2&gt; /dev/null
+</span><span class='line'>rm -rf <span class="nv">$LOCAL_OUTDIR</span>
+</span><span class='line'><span class="nb">cd</span> ..
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Finished!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>给 build.sh 添加执行权限,并执行</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x build.sh
+</span><span class='line'>./build.sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意：</strong>有可能会报这个错误：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>autoheader: error: AC_CONFIG_HEADERS not found in configure.ac
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这时需要修改 tesseract-3.02.02/configure.ac 文件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#AM_INIT_AUTOMAKE(dist-zip)</span>
+</span><span class='line'> AM_INIT_AUTOMAKE
+</span><span class='line'><span class="c">#AM_CONFIG_HEADER(config_auto.h:config/config.h.in)  //将这句注释</span>
+</span><span class='line'>AC_CONFIG_HEADER<span class="o">(</span>config_auto.h:config/config.h.in<span class="o">)</span> //修改为这个
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>编译成功后，会在当前目录下的 dependencies 文件夹生成所需要的头文件“.h”和lib库&#8221;*.a&#8221;。项目中只需要使用头文件和liblept.a、libtesseract_all.a这2个库即可。</p>
+
+<p><img src="/images/tesseract/build_success.png" alt="tesseract" /></p>
+
+<h1>使用</h1>
+
+<h2>简单使用</h2>
+
+<p>参考：<a href="https://github.com/ldiqual/tesseract-ios">tesseract-ios</a>和<a href="https://github.com/ldiqual/tesseract-ios-lib/tree/master/lib">tesseract-ios-lib</a></p>
+
+<ul>
+<li>Tesseract.h</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
+</span><span class='line'><span class="c1">//  Tesseract.h</span>
+</span><span class='line'><span class="c1">//  Tesseract</span>
+</span><span class='line'><span class="c1">//</span>
+</span><span class='line'><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">Tesseract</span> : <span class="nc">NSObject</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSString</span><span class="o">*</span> <span class="n">_dataPath</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSString</span><span class="o">*</span> <span class="n">_language</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSMutableDictionary</span><span class="o">*</span> <span class="n">_variables</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">version</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithDataPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">dataPath</span> <span class="nf">language:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">language</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setVariableValue:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">value</span> <span class="nf">forKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setImage:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">setLanguage:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">language</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">recognize</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">recognizedText</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Tesseract.mm</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
+</span><span class='line'><span class="c1">//  Tesseract.mm</span>
+</span><span class='line'><span class="c1">//  Tesseract</span>
+</span><span class='line'><span class="c1">//</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#import &quot;Tesseract.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#import &quot;baseapi.h&quot;</span>
+</span><span class='line'><span class="cp">#import &quot;environ.h&quot;</span>
+</span><span class='line'><span class="cp">#import &quot;pix.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="n">tesseract</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">class</span> <span class="n">TessBaseAPI</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">Tesseract</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tesseract</span><span class="o">::</span><span class="n">TessBaseAPI</span><span class="o">*</span> <span class="n">_tesseract</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">uint32_t</span><span class="o">*</span> <span class="n">_pixels</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">Tesseract</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">version</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%s&quot;</span><span class="p">,</span> <span class="n">tesseract</span><span class="o">::</span><span class="n">TessBaseAPI</span><span class="o">::</span><span class="n">Version</span><span class="p">()];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithDataPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">dataPath</span> <span class="nf">language:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">language</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">_dataPath</span> <span class="o">=</span> <span class="n">dataPath</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">_language</span> <span class="o">=</span> <span class="n">language</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">_variables</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSMutableDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="n">copyDataToDocumentsDirectory</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_tesseract</span> <span class="o">=</span> <span class="n">new</span> <span class="n">tesseract</span><span class="o">::</span><span class="n">TessBaseAPI</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">initEngine</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">initEngine</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">returnCode</span> <span class="o">=</span> <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">Init</span><span class="p">([</span><span class="n">_dataPath</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="p">[</span><span class="n">_language</span> <span class="n">UTF8String</span><span class="p">]);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">returnCode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">YES</span> <span class="o">:</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">copyDataToDocumentsDirectory</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Useful paths</span>
+</span><span class='line'>    <span class="n">NSFileManager</span> <span class="o">*</span><span class="n">fileManager</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSFileManager</span> <span class="n">defaultManager</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">documentPaths</span> <span class="o">=</span> <span class="n">NSSearchPathForDirectoriesInDomains</span><span class="p">(</span><span class="n">NSDocumentDirectory</span><span class="p">,</span> <span class="n">NSUserDomainMask</span><span class="p">,</span> <span class="n">YES</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">documentPath</span> <span class="o">=</span> <span class="p">([</span><span class="n">documentPaths</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="p">[</span><span class="n">documentPaths</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">]</span> <span class="o">:</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">dataPath</span> <span class="o">=</span> <span class="p">[</span><span class="n">documentPath</span> <span class="nl">stringByAppendingPathComponent:</span><span class="n">_dataPath</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Copy data in Doc Directory</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">fileManager</span> <span class="nl">fileExistsAtPath:</span><span class="n">dataPath</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSString</span> <span class="o">*</span><span class="n">bundlePath</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSBundle</span> <span class="nl">bundleForClass:</span><span class="p">[</span><span class="n">self</span> <span class="n">class</span><span class="p">]]</span> <span class="n">bundlePath</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">NSString</span> <span class="o">*</span><span class="n">tessdataPath</span> <span class="o">=</span> <span class="p">[</span><span class="n">bundlePath</span> <span class="nl">stringByAppendingPathComponent:</span><span class="n">_dataPath</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">tessdataPath</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">fileManager</span> <span class="nl">createDirectoryAtPath:</span><span class="n">documentPath</span> <span class="nl">withIntermediateDirectories:</span><span class="n">YES</span> <span class="nl">attributes:</span><span class="nb">nil</span> <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">fileManager</span> <span class="nl">copyItemAtPath:</span><span class="n">tessdataPath</span> <span class="nl">toPath:</span><span class="n">dataPath</span> <span class="nl">error:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">setenv</span><span class="p">(</span><span class="s">&quot;TESSDATA_PREFIX&quot;</span><span class="p">,</span> <span class="p">[[</span><span class="n">documentPath</span> <span class="nl">stringByAppendingString:</span><span class="s">@&quot;/&quot;</span><span class="p">]</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setVariableValue:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">value</span> <span class="nf">forKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="p">{</span>
+</span><span class='line'>    <span class="cm">/*</span>
+</span><span class='line'><span class="cm">     * Example:</span>
+</span><span class='line'><span class="cm">     * _tesseract-&gt;SetVariable(&quot;tessedit_char_whitelist&quot;, &quot;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;);</span>
+</span><span class='line'><span class="cm">     * _tesseract-&gt;SetVariable(&quot;language_model_penalty_non_freq_dict_word&quot;, &quot;0&quot;);</span>
+</span><span class='line'><span class="cm">     * _tesseract-&gt;SetVariable(&quot;language_model_penalty_non_dict_word &quot;, &quot;0&quot;);</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">_variables</span> <span class="nl">setValue:</span><span class="n">value</span> <span class="nl">forKey:</span><span class="n">key</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">SetVariable</span><span class="p">([</span><span class="n">key</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="p">[</span><span class="n">value</span> <span class="n">UTF8String</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadVariables</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">NSString</span><span class="o">*</span> <span class="n">key</span> <span class="k">in</span> <span class="n">_variables</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSString</span><span class="o">*</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">_variables</span> <span class="nl">objectForKey:</span><span class="n">key</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">SetVariable</span><span class="p">([</span><span class="n">key</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="p">[</span><span class="n">value</span> <span class="n">UTF8String</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">setLanguage:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">language</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_language</span> <span class="o">=</span> <span class="n">language</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">returnCode</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">initEngine</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">returnCode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/*</span>
+</span><span class='line'><span class="cm">     * &quot;WARNING: On changing languages, all Tesseract parameters</span>
+</span><span class='line'><span class="cm">     * are reset back to their default values.&quot;</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">loadVariables</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">recognize</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">returnCode</span> <span class="o">=</span> <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">Recognize</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">returnCode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">YES</span> <span class="o">:</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">recognizedText</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span><span class="o">*</span> <span class="n">utf8Text</span> <span class="o">=</span> <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">GetUTF8Text</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">utf8Text</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setImage:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">_pixels</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGSize</span> <span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span> <span class="n">size</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">width</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">_pixels</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint32_t</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint32_t</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Clear the pixels so any transparency is preserved</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">(</span><span class="n">_pixels</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint32_t</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGColorSpaceRef</span> <span class="n">colorSpace</span> <span class="o">=</span> <span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create a context with RGBA _pixels</span>
+</span><span class='line'>    <span class="n">CGContextRef</span> <span class="n">context</span> <span class="o">=</span> <span class="n">CGBitmapContextCreate</span><span class="p">(</span><span class="n">_pixels</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">width</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint32_t</span><span class="p">),</span> <span class="n">colorSpace</span><span class="p">,</span>
+</span><span class='line'>                                                 <span class="n">kCGBitmapByteOrder32Little</span> <span class="o">|</span> <span class="n">kCGImageAlphaPremultipliedLast</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Paint the bitmap to our context which will fill in the _pixels array</span>
+</span><span class='line'>    <span class="n">CGContextDrawImage</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="p">[</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// We&#39;re done with the context and color space</span>
+</span><span class='line'>    <span class="n">CGContextRelease</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CGColorSpaceRelease</span><span class="p">(</span><span class="n">colorSpace</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">_tesseract</span><span class="o">-&gt;</span><span class="n">SetImage</span><span class="p">((</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">_pixels</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint32_t</span><span class="p">),</span> <span class="n">width</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint32_t</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Code Sample</h2>
+
+<pre><code>#import "Tesseract.h"
+
+Tesseract* tesseract = [[Tesseract alloc] initWithDataPath:@"tessdata" language:@"eng"];
+[tesseract setVariableValue:@"0123456789" forKey:@"tessedit_char_whitelist"];
+[tesseract setImage:[UIImage imageNamed:@"image_sample.jpg"]];
+[tesseract recognize];
+
+NSLog(@"%@", [tesseract recognizedText]);
+</code></pre>
+
+<h2>其他方式使用</h2>
+
+<p>可以结合下列参考：</p>
+
+<ul>
+<li><p><a href="https://github.com/rcarlsen/Pocket-OCR">https://github.com/rcarlsen/Pocket-OCR</a></p></li>
+<li><p>官方 <a href="http://developer.apple.com/library/ios/#samplecode/PhotoPicker/Introduction/Intro.html">PhotoPicker</a> 实例</p></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-14T10:52:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>, <a class='category' href='/blog/categories/tesseract/'>tesseract</a>
+  
+</span>
+
+
+    </p>
+	<p class="meta">
+		原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+	</p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <style>
+    .flash-video{display:none;}
+</style>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_renren">人人网</a>
+	<a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1729167" async=""></script>
+<!-- UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/11/uiviewcontroller-life-cycle/" title="Previous Post: UIViewController加载与销毁">&laquo; UIViewController加载与销毁</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/15/ios-error-collation/" title="Next Post: iOS编译问题收集">iOS编译问题收集 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/ios-ui-design/">iOS界面设计切图小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/10/tools-error-handling/">开发工具错误及解决汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>现沪江网移动开发负责</p>
+  <p>JAVA开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾开发开心词场、沪江小D等移动APP</p>
+</section>
+<section>
+  <h1>其他博客</h1>
+  <p><a href="http://timroadley.com/">Tim Roadley</a></p>
+  <p><a href="http://blog.devtang.com/">唐巧的技术博客</a></p>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

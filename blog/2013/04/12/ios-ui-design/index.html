@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS界面设计切图小结 - 个人博客</title>
+  <meta name="author" content="徐大雨">
+
+  
+  <meta name="description" content="1.基本尺寸 （1）界面 实际设计时按： iPhone4、4s：640px*960px
+iPhone5: 640px*1136px
+iPad：1536px*2048px (2) 图标： 1024px*1024px 圆角180px
+提交1024px*1024px 方角 png格式图片 2. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danielxu.github.com/blog/2013/04/12/ios-ui-design/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/favicon.ico" type="image/vnd.microsoft.icon" rel="icon"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="个人博客" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">个人博客</a></h1>
+  
+    <h2>随时记录下自己的点滴.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:danielxu.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iOS界面设计切图小结</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T11:24:00+08:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>1.基本尺寸</h2>
+
+<h3>（1）界面</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_1.png"></p>
+
+<p>实际设计时按：</p>
+
+<ul>
+<li>iPhone4、4s：640px*960px</li>
+<li>iPhone5:  640px*1136px</li>
+<li>iPad：1536px*2048px</li>
+</ul>
+
+
+<h3>(2) 图标：</h3>
+
+<ul>
+<li>1024px*1024px  圆角180px</li>
+<li>提交1024px*1024px 方角 png格式图片</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>2.图形部件及字体</h2>
+
+<h3>（1） 为显示清晰</h3>
+
+<ul>
+<li>所有图形部件尺寸必须为偶数</li>
+<li>样式中阴影、发光、描边的数值也必须为偶数</li>
+</ul>
+
+
+<h3>（2） 为方便用户点击</h3>
+
+<ul>
+<li>所有可点击的部件需大于88px*88px</li>
+<li>若图片本身不够，可在切图时补足空白像素
+例如：<img src="/images/uidesign/iOS_ui_design_2.png"></li>
+</ul>
+
+
+<h3>（3）为减小程序体积</h3>
+
+<p>建议尽量使用可平铺图案设计界面</p>
+
+<h3>（4）苹果默认字体</h3>
+
+<p>在pc上没有完全一样的字体，Hiragino Sans GB苹果丽黑最相近
+一般做效果图时，用Hiragino Sans GB（包括中英文）代替即可，也可以用方正黑体代替</p>
+
+<ul>
+<li>所有字体使用偶数字号进行设计</li>
+<li>苹果丽黑有W3、W6两种粗细的字体</li>
+</ul>
+
+
+<p><img src="/images/uidesign/iOS_ui_design_3.png"></p>
+
+<p>附下载地址：<a href="http://www.iplaysoft.com/hiragino-sans.html">苹果丽黑</a></p>
+
+<h3>（5）系统可以做到如下字体效果</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_4.png"></p>
+
+<p>即，向特定方向1px（做效果图时做2px的效果）投影，需给出字体颜色、阴影颜色。
+一般不建议按钮上的文字做特殊效果。如果必要， 需将字体和按钮一起切图。</p>
+
+<h3>（6）导航栏中的文字一般为40点W6</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_5.png"></p>
+
+<h2>3.切图提示</h2>
+
+<h3>(1）所有切图必须为偶数</h3>
+
+<p>先根据Retina屏幕切图（即640<em>960/640</em>1136/1536*2048），后将切图缩为普通屏幕尺寸。
+（有特殊图片需要单独制作）</p>
+
+<h3>（2）可平铺部件切图时可如下图：</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_6.png"></p>
+
+<p>带圆角按钮切图时可如下图</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_7.png"></p>
+
+<p>同理</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_8.png"></p>
+
+<p>并在效果图中标出具体大小</p>
+
+<p>标注软件推荐：<a href="http://www.appinn.com/dorado/">dorado</a></p>
+
+<h3>（3）导航栏和标签栏下的阴影程序可以自动生成，可不切，如图：</h3>
+
+<p><img src="/images/uidesign/iOS_ui_design_9.png"></p>
+
+<p><img src="/images/uidesign/iOS_ui_design_10.png"></p>
+
+<p>若不满意默认阴影效果，可以单独切2px宽的阴影，如图：</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_11.png"></p>
+
+<p>如有异形阴影如：</p>
+
+<p><img src="/images/uidesign/iOS_ui_design_12.png"></p>
+
+<p>需切整条阴影，并与攻城师说明。</p>
+
+<h3>（4）所有按钮需有两种状态——正常状态和按下状态</h3>
+
+<h3>（6）一般情况下切图格式为png24</h3>
+
+<ul>
+<li>若个别图片jpg比png小很多，可用jpg</li>
+<li>但欢迎页、icon必须为png，在不影响显示效果的前提下，可以考虑用png8</li>
+</ul>
+
+
+<h2>4.命名</h2>
+
+<h3>（1）图片命名后缀</h3>
+
+<ul>
+<li><p>根据Retina屏幕的切图文件名后加@2x，普通屏幕尺寸不用加。</p></li>
+<li><p>欢迎页、背景等需要对iPhone5另外切图的文件名后加-568h@2x</p></li>
+</ul>
+
+
+<h3>（2）命名建议</h3>
+
+<p>建议采用如下方法命名，如：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>切图性质_功能相关描述_图片描述（可无）_状态说明（可无）@2x.png</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用例:</p>
+
+<ul>
+<li>Retina屏幕切图</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bg_booksnum_pressed@2x.png
+</span><span class='line'>ico_arrow_blue@2x.png
+</span><span class='line'>btn_blue_pressed@2x.png
+</span><span class='line'>pic_books_blue@2x.png
+</span><span class='line'>bg_main-568h@2x.png</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>普通屏幕切图</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>​bg_booksnum_pressed.png 
+</span><span class='line'>ico_arrow_blue.png
+</span><span class='line'>btn_blue_pressed.png
+</span><span class='line'>pic_books_blue.png
+</span><span class='line'>按下状态切图命名后加_pressed</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>另外贴个建议命名备忘</li>
+</ul>
+
+
+<p><img src="/images/uidesign/iOS_ui_design_13.png"></p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="/files/uidesign/iOS_UI_design_1.pdf">iOS交互设计指南翻译</a></li>
+<li><a href="http://developer.apple.com/library/ios/#documentation/userexperience/conceptual/mobilehig/IconsImages/IconsImages.html">iOS设计指南·官方</a></li>
+<li><a href="http://iconhandbook.co.uk/reference/chart/">iconhandbook</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T11:24:00+08:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ui/'>UI</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+	<p class="meta">
+		原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+	</p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <style>
+    .flash-video{display:none;}
+</style>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_renren">人人网</a>
+	<a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1729167" async=""></script>
+<!-- UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/10/tools-error-handling/" title="Previous Post: 开发工具错误及解决汇总">&laquo; 开发工具错误及解决汇总</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/05/02/ios-optimizations-image/" title="Next Post: 查看Xocde编译优化后的图片(PNG)">查看Xocde编译优化后的图片(PNG) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/ios-ui-design/">iOS界面设计切图小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/10/tools-error-handling/">开发工具错误及解决汇总</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>现沪江网移动开发负责</p>
+  <p>JAVA开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾开发开心词场、沪江小D等移动APP</p>
+</section>
+<section>
+  <h1>其他博客</h1>
+  <p><a href="http://timroadley.com/">Tim Roadley</a></p>
+  <p><a href="http://blog.devtang.com/">唐巧的技术博客</a></p>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
