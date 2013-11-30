@@ -9,22 +9,8 @@
   <meta name="author" content="徐大雨">
 
   
-  <meta name="description" content="系统文件夹 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-#define DocumentsDirectory [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) &hellip;">
+  <meta name="description" content="引用: 唐巧的blog：在MacOS和iOS系统中使用OpenCV MacOS系统中使用OpenCV 安装OpenCV 相信大部分Mac用户都安装了brew或port，如果你没有装，那么首先安装一下brew吧。使用如下命令安装brew: 1
+ruby -e &quot;$(curl -fsSkL &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +67,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/17/use-opencv-in-ios-or-mac/">在iOS和Mac上使用OpenCV</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-17T17:18:00+08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>引用: <a href="http://blog.devtang.com/blog/2012/10/27/use-opencv-in-ios/">唐巧的blog：在MacOS和iOS系统中使用OpenCV</a></p>
+
+<h2>MacOS系统中使用OpenCV</h2>
+
+<h3>安装OpenCV</h3>
+
+<p>相信大部分Mac用户都安装了brew或port，如果你没有装，那么首先安装一下brew吧。使用如下命令安装brew:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ruby -e <span class="s2">&quot;$(curl -fsSkL raw.github.com/mxcl/homebrew/go)&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在安装好brew后，只需要一条命令就可以安装OpenCV了：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install opencv
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通常情况下这样做就应该会安装成功，但我在公司和家里面的电脑尝试的时候，brew都会报一些错误，我遇到的都是一些小问题，按照brew的提示信息，解决掉相应的问题即可。</p>
+
+<p>安装成功后，你应该可以在“/usr/local/include&#8221;目录下找到名为opencv和opencv2的目录，这里面是OpenCV相关的头文件。你也可以在“/usr/local/lib&#8221;目录下找到许多以libopencv_开头的.dylib文件，这些是OpenCV的链接库文件。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/17/use-opencv-in-ios-or-mac/">阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -838,6 +887,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/29/git-on-mac-to-install-p4merge/">在Mac上给git安装P4Merge</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
       </li>
     
@@ -851,10 +904,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
       </li>
     
   </ul>

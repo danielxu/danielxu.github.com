@@ -4,7 +4,7 @@
   <title><![CDATA[个人博客]]></title>
   <link href="http://danielxu.github.com/atom.xml" rel="self"/>
   <link href="http://danielxu.github.com/"/>
-  <updated>2013-11-30T17:54:20+08:00</updated>
+  <updated>2013-11-30T17:59:12+08:00</updated>
   <id>http://danielxu.github.com/</id>
   <author>
     <name><![CDATA[徐大雨]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在Mac上给git安装P4Merge]]></title>
+    <link href="http://danielxu.github.com/blog/2013/11/29/git-on-mac-to-install-p4merge/"/>
+    <updated>2013-11-29T22:49:00+08:00</updated>
+    <id>http://danielxu.github.com/blog/2013/11/29/git-on-mac-to-install-p4merge</id>
+    <content type="html"><![CDATA[<p>在使用Git作为源代码管理工具的时候，进行多人协作总会遇到合拼代码冲突的情况，如果靠人工一个文件一个文件的查找处理，将是多么麻烦的一件事情。所幸有免费的处理工具<a href="http://www.perforce.com/downloads/Perforce-Software-Version-Management/complete_list/Customer">P4Merge</a>,收费的就不说了。</p>
+
+<p>P4Merge是一个Git版本库下的一个代码合并工具。免费，简单。</p>
+
+<h2>安装</h2>
+
+<p>双击下载回来的 P4V.dmg，将 p4merge 拖入到 Applications 文件夹内</p>
+
+<!--more-->
+
+
+<h2>配置</h2>
+
+<h3>创建运行脚本</h3>
+
+<p>创建2个p4merge命令行运行的脚本，如下：</p>
+
+<h4>p4merge</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo vi /usr/local/bin/p4merge
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将下面的复制到p4merge文件中,保存</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>/Applications/p4merge.app/Contents/MacOS/p4merge <span class="nv">$*</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>p4diff</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo vi /usr/local/bin/p4diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将下面的复制到p4diff文件中,保存</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="o">[</span> <span class="nv">$# </span>-eq 7 <span class="o">]</span> <span class="o">&amp;&amp;</span> /usr/local/bin/p4merge <span class="s2">&quot;$2&quot;</span> <span class="s2">&quot;$PWD/$5&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>修改运行权限</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo chmod +x /usr/local/bin/p4merge
+</span><span class='line'><span class="nv">$ </span>sudo chmod +x /usr/local/bin/p4diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置GIT</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vi ~/.gitconfig
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>增加如下的p4merge配置，保存。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>merge<span class="o">]</span>
+</span><span class='line'>    <span class="nv">tool</span> <span class="o">=</span> p4merge
+</span><span class='line'>    <span class="nv">keepBackup</span> <span class="o">=</span> <span class="nb">false</span>
+</span><span class='line'><span class="o">[</span>mergetool <span class="s2">&quot;p4merge&quot;</span><span class="o">]</span>
+</span><span class='line'>    <span class="nv">cmd</span> <span class="o">=</span> p4merge <span class="s2">&quot;$BASE&quot;</span> <span class="s2">&quot;$LOCAL&quot;</span> <span class="s2">&quot;$REMOTE&quot;</span> <span class="s2">&quot;$MERGED&quot;</span>
+</span><span class='line'>    <span class="nv">keepTemporaries</span> <span class="o">=</span> <span class="nb">false</span>
+</span><span class='line'><span class="nb">    </span><span class="nv">trustExitCode</span> <span class="o">=</span> <span class="nb">false</span>
+</span><span class='line'><span class="nb">    </span><span class="nv">keepBackup</span> <span class="o">=</span> <span class="nb">false</span>
+</span><span class='line'><span class="o">[</span>diff<span class="o">]</span>
+</span><span class='line'>    <span class="nv">external</span> <span class="o">=</span> p4diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在进行版本合并的时候，如果出现不能自动merge的情况，就可以使用<code>git mergetool</code> 或者 <code>git diff</code>处理你的代码</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[查看Xocde编译优化后的图片(PNG)]]></title>

@@ -9,8 +9,7 @@
   <meta name="author" content="徐大雨">
 
   
-  <meta name="description" content="Xcode开发工具，在编译APP的时候，会把APP内配图（PNG）进行优化。优化的动作是由pngcrush工具完成的，而优化后的图片文件是不能直接查看。 那么如果想查看这样优化过后的图片，就需要使用pngcrush撤销这些图片的优化。下面是命令： 1
-xudayu@DayuXu:Test.app &hellip;">
+  <meta name="description" content="在使用Git作为源代码管理工具的时候，进行多人协作总会遇到合拼代码冲突的情况，如果靠人工一个文件一个文件的查找处理，将是多么麻烦的一件事情。所幸有免费的处理工具P4Merge,收费的就不说了。 P4Merge是一个Git版本库下的一个代码合并工具。免费，简单。 安装 双击下载回来的 P4V.dmg &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +66,53 @@ xudayu@DayuXu:Test.app &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/29/git-on-mac-to-install-p4merge/">在Mac上给git安装P4Merge</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T22:49:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在使用Git作为源代码管理工具的时候，进行多人协作总会遇到合拼代码冲突的情况，如果靠人工一个文件一个文件的查找处理，将是多么麻烦的一件事情。所幸有免费的处理工具<a href="http://www.perforce.com/downloads/Perforce-Software-Version-Management/complete_list/Customer">P4Merge</a>,收费的就不说了。</p>
+
+<p>P4Merge是一个Git版本库下的一个代码合并工具。免费，简单。</p>
+
+<h2>安装</h2>
+
+<p>双击下载回来的 P4V.dmg，将 p4merge 拖入到 Applications 文件夹内</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/29/git-on-mac-to-install-p4merge/">阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -497,69 +543,6 @@ xudayu@DayuXu:Test.app &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/17/use-opencv-in-ios-or-mac/">在iOS和Mac上使用OpenCV</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-17T17:18:00+08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>引用: <a href="http://blog.devtang.com/blog/2012/10/27/use-opencv-in-ios/">唐巧的blog：在MacOS和iOS系统中使用OpenCV</a></p>
-
-<h2>MacOS系统中使用OpenCV</h2>
-
-<h3>安装OpenCV</h3>
-
-<p>相信大部分Mac用户都安装了brew或port，如果你没有装，那么首先安装一下brew吧。使用如下命令安装brew:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>ruby -e <span class="s2">&quot;$(curl -fsSkL raw.github.com/mxcl/homebrew/go)&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在安装好brew后，只需要一条命令就可以安装OpenCV了：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install opencv
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通常情况下这样做就应该会安装成功，但我在公司和家里面的电脑尝试的时候，brew都会报一些错误，我遇到的都是一些小问题，按照brew的提示信息，解决掉相应的问题即可。</p>
-
-<p>安装成功后，你应该可以在“/usr/local/include&#8221;目录下找到名为opencv和opencv2的目录，这里面是OpenCV相关的头文件。你也可以在“/usr/local/lib&#8221;目录下找到许多以libopencv_开头的.dylib文件，这些是OpenCV的链接库文件。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/01/17/use-opencv-in-ios-or-mac/">阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -575,6 +558,10 @@ xudayu@DayuXu:Test.app &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/29/git-on-mac-to-install-p4merge/">在Mac上给git安装P4Merge</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/05/02/ios-optimizations-image/">查看Xocde编译优化后的图片(PNG)</a>
       </li>
     
@@ -588,10 +575,6 @@ xudayu@DayuXu:Test.app &hellip;">
     
       <li class="post">
         <a href="/blog/2013/02/18/goagentx-privoxy/">GoAgentX 智能代理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/18/git-simple-workflow/">项目中使用git管理源码简单流程</a>
       </li>
     
   </ul>
