@@ -4,7 +4,7 @@
   <title><![CDATA[CoreXDY'S Ben]]></title>
   <link href="http://danielxu.github.com/atom.xml" rel="self"/>
   <link href="http://danielxu.github.com/"/>
-  <updated>2013-12-31T23:05:35+08:00</updated>
+  <updated>2013-12-31T23:13:09+08:00</updated>
   <id>http://danielxu.github.com/</id>
   <author>
     <name><![CDATA[徐大雨]]></name>
@@ -54,7 +54,8 @@
 <!--more-->
 
 
-<blockquote><p>下载： <a href="./downloads/apk/apk%20decompile.zip">apk decompile.zip</a></p></blockquote>
+<blockquote><p>下载： <a href="./downloads/apk/apk%20decompile.zip">apk decompile.zip</a>,不包含程序文件，相关文件自行下载然后解压后放到一起，目录结构如下图：
+<img src="images/tools/apk/files_tree.png"></p></blockquote>
 ]]></content>
   </entry>
   
