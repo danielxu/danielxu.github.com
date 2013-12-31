@@ -1,0 +1,292 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Mac下的apk反编译脚本 - CoreXDY'S Ben</title>
+	<meta name="author" content="徐大雨">
+
+	
+	<meta name="description" content="Mac下的apk反编译脚本">
+	<meta name="keywords" content="Mac,mac,tools,反编译">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="CoreXDY'S Ben" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://danielxu.github.com/blog/2013/12/31/apk-decompiled-script-for-mac/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-46463126-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			    <header id="header" class="inner"><div class="profilepic">
+	
+	<img src="http://www.gravatar.com/avatar/e969d62f1b91d0c53b92d3470867e1e2?s=160" alt="Profile Picture" style="width: 160px;" />
+	
+
+<hgroup>
+  <h1><a href="/">CoreXDY'S Ben</a></h1>
+  
+    <p class="subtitle">
+        锲而不舍，金石可镂
+    </p>
+  
+    
+    <p class="subtitle">
+        iOS/Android，JAVA EE开发者。
+    </p>
+    
+
+</hgroup>
+
+<section>
+  <!--<h1>About Me</h1>-->
+  <!--<p>原沪江网移动开发负责</p>-->
+  <p>JAVA EE开发工程师，曾开发SP管理群发平台、IPTV、上海移动手机彩票等系统.</p>
+  <p>iOS开发工程师，曾主持并开发过开心词场、沪江小D等移动APP,对Android略熟。</p>
+</section>
+
+<nav id="main-nav"><!--{ if site.simple_search }-->
+<!--<form action="{ site.simple_search }}" method="get">-->
+    <!--<fieldset role="search">-->
+        <!--<input type="hidden" name="q" value="site:danielxu.github.com" />-->
+        <!--<input class="search" type="text" name="q" results="0" placeholder="Search"/>-->
+    <!--</fieldset>-->
+<!--</form>-->
+<!--{ endif }-->
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/ios">iOS开发</a></li>
+  <li><a href="/blog/categories/source">源码&组件管理</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+                <a class="weibo" href="http://www.weibo.com/xdyia" title="Weibo">Weibo</a>
+                
+		
+			<a class="facebook" href="http://www.facebook.com/corexdb" title="Facebook">Facebook</a>
+		
+		
+		
+			<a class="twitter" href="http://twitter.com/corexdy" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/danielxu" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+        
+            <a class="instagram" href="http://instagram.com/danielxdy" title="Instagram">Instagram</a>
+        
+		
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</div></header>
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Mac下的apk反编译脚本</h1>
+	<div class="entry-content" itemprop="articleBody"><ul>
+<li><p>反编译资源文件使用的是<a href="https://code.google.com/p/android-apktool/">apktool</a></p>
+
+<blockquote><p>需要下载apktool 和 apktool-install-macosx*.tar.bz2这2个文件，解压后将2个文件夹里的文件合并放到一个文件夹</p></blockquote></li>
+<li><p>反编译classes的是<a href="https://code.google.com/p/dex2jar/">dex2jar</a></p></li>
+<li>查看反编译后的jar包使用<a href="http://jd.benow.ca/">JD-GUI</a>,下载 Mac 版本</li>
+</ul>
+
+
+<p>本工具包已经将上诉文件下载整合到一起了。如果有更新，可以自己替换。</p>
+
+<p>unapk.sh 为了方便使用，将2个工具的命令写了个简单的 shell 脚本</p>
+
+<p>可以使用</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x unapk.sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>赋予程序可执行权限</p>
+
+<p>使用方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sh unapk.sh YOUNAME.apk
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>YOUNAME 就是你要进行反编译的 apk 的名字，如：1.apk</p></blockquote>
+
+<p>展现结果就是在当前目录下会创建文件夹 YOUNAME ，里面存放翻遍以后的资源文件和jar文件。随后使用JD-GUI进行编译后源代码阅读。</p>
+
+<!--more-->
+
+
+<blockquote><p>下载： <a href="./downloads/apk/apk%20decompile.zip">apk decompile.zip</a></p></blockquote>
+</div>
+
+
+<footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐大雨</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-31T22:39:00+08:00" data-updated="true" itemprop="datePublished">Dec 31<span>st</span>, 2013</time>
+      
+
+
+	<a class='category' href='/blog/categories/mac/'>mac</a>, <a class='category' href='/blog/categories/tools/'>tools</a>
+
+
+
+        <br/>
+        
+原创&amp;整理的文章，版权声明:自由转载-非商用&amp;衍生-保持署名 | <a herf="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">Creative Commons BY-NC-ND 3.0</a>
+
+    </p>
+  </footer>
+</article>
+        <br/>
+
+<div >
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+        
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share?uid=1729167" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+    var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1352341696839627" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+        
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <!--<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>-->
+</div>
+
+
+
+
+
+<section id="comment">
+    <h1></h1>
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1729167"></script>
+    <!-- UY END -->
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2013 - 徐大雨 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+	
+
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-46463126-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

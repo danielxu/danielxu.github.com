@@ -9,7 +9,7 @@
 	<meta name="author" content="徐大雨">
 
 	
-	<meta name="description" content="Nov 29th, 2013 git, mac, p4merge 在Mac上给git安装P4Merge 在使用Git作为源代码管理工具的时候，进行多人协作总会遇到合拼代码冲突的情况，如果靠人工一个文件一个文件的查找处理，将是多么麻烦的一件事情。所幸有免费的处理工具P4Merge,收费的就不说了 &hellip;">
+	<meta name="description" content="Dec 31st, 2013 mac, tools Mac下的apk反编译脚本 反编译资源文件使用的是apktool 需要下载apktool 和 apktool-install-macosx*.tar.bz2这2个文件，解压后将2个文件夹里的文件合并放到一个文件夹 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -133,6 +133,73 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-31T22:39:00+08:00" data-updated="true" itemprop="datePublished">Dec 31<span>st</span>, 2013</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mac/'>mac</a>, <a class='category' href='/blog/categories/tools/'>tools</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/12/31/apk-decompiled-script-for-mac/" itemprop="url">Mac下的apk反编译脚本</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<ul>
+<li><p>反编译资源文件使用的是<a href="https://code.google.com/p/android-apktool/">apktool</a></p>
+
+<blockquote><p>需要下载apktool 和 apktool-install-macosx*.tar.bz2这2个文件，解压后将2个文件夹里的文件合并放到一个文件夹</p></blockquote></li>
+<li><p>反编译classes的是<a href="https://code.google.com/p/dex2jar/">dex2jar</a></p></li>
+<li>查看反编译后的jar包使用<a href="http://jd.benow.ca/">JD-GUI</a>,下载 Mac 版本</li>
+</ul>
+
+
+<p>本工具包已经将上诉文件下载整合到一起了。如果有更新，可以自己替换。</p>
+
+<p>unapk.sh 为了方便使用，将2个工具的命令写了个简单的 shell 脚本</p>
+
+<p>可以使用</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x unapk.sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>赋予程序可执行权限</p>
+
+<p>使用方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sh unapk.sh YOUNAME.apk
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>YOUNAME 就是你要进行反编译的 apk 的名字，如：1.apk</p></blockquote>
+
+<p>展现结果就是在当前目录下会创建文件夹 YOUNAME ，里面存放翻遍以后的资源文件和jar文件。随后使用JD-GUI进行编译后源代码阅读。</p>
+
+
+		
+		<a href="/blog/2013/12/31/apk-decompiled-script-for-mac/" class="more-link">阅读 &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -516,46 +583,6 @@
 
 		
 		<a href="/blog/2013/01/17/use-iap/" class="more-link">阅读 &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-17T17:40:00+08:00" data-updated="true" itemprop="datePublished">Jan 17<span>th</span>, 2013</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/zxing/'>ZXing</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2013/01/17/use-zxing/" itemprop="url">在iOS项目中使用ZXing</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>之前项目中使用过ZXing进行二维码识别，不过人比较懒。发现<a href="http://blog.devtang.com/blog/2012/12/23/use-zxing-library/">唐巧的博文：在iOS中使用ZXing库</a>,就引用过来，留着以后查询使用。</p>
-
-<h2>前言</h2>
-
-<p><a href="https://code.google.com/p/zxing/">ZXing</a>(<a href="https://github.com/zxing/zxing">Github镜像地址</a>)是一个开源的条码生成和扫描库（开源协议为<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache2.0</a>)。它不但支持众多的条码格式，而且有各种语言的实现版本，它支持的语言包括：Java, C++, C#, Objective-C, ActionScript和Ruby。</p>
-
-
-		
-		<a href="/blog/2013/01/17/use-zxing/" class="more-link">阅读 &rarr;</a>
 	</div>
 
 </article>
