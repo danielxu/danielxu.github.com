@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | CoreXDY'S Ben]]></title>
   <link href="http://danielxu.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://danielxu.github.com/"/>
-  <updated>2013-12-31T23:17:05+08:00</updated>
+  <updated>2013-12-31T23:25:55+08:00</updated>
   <id>http://danielxu.github.com/</id>
   <author>
     <name><![CDATA[徐大雨]]></name>
@@ -50,9 +50,11 @@ sh unapk.sh YOUNAME.apk
 <!--more-->
 
 
-<blockquote><p>下载： <a href="/downloads/apk/apk%20decompile.zip">apk decompile.zip</a>,不包含程序文件，相关文件自行下载然后解压后放到一起，目录结构如下图：</p>
+<p>下载： <a href="/downloads/apk/apk%20decompile.zip">apk decompile.zip</a>, 不包含程序文件.</p>
 
-<p><img src="/images/tools/apk/files_tree.png"></p></blockquote>
+<p>相关文件自行下载然后解压后放到一起，目录结构如下图：</p>
+
+<p><img src="/images/tools/apk/files_tree.png"></p>
 ]]></content>
   </entry>
   
